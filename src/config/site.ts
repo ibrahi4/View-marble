@@ -1,0 +1,49 @@
+const env = {
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://view.sa",
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "+966564893699",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "+966564893699",
+  email: process.env.NEXT_PUBLIC_EMAIL ?? "hello@view.sa",
+  gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
+};
+
+const formatPhoneDisplay = (raw: string) => {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length !== 10) return raw;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+};
+
+export const siteConfig = {
+  name: "View",
+  nameAr: "\u0641\u064A\u0648",
+  url: env.url,
+  phone: env.phone,
+  phoneDisplay: formatPhoneDisplay(env.phone),
+  whatsapp: env.whatsapp,
+  email: env.email,
+  gaId: env.gaId,
+  location: "\u0627\u0644\u062F\u0645\u0627\u0645",
+  region: "\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629",
+  title:
+    "\u0641\u064A\u0648 | \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0648\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645",
+  description:
+    "\u0634\u0631\u0643\u0629 \u0641\u064A\u0648 \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645\u060C \u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645\u064A\u0629\u060C \u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645\u060C \u0648\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u062E\u0628\u0631 \u0648\u0627\u0644\u0638\u0647\u0631\u0627\u0646 \u0648\u0627\u0644\u062C\u0628\u064A\u0644 \u0648\u0645\u062D\u064A\u0637\u0647\u0627.",
+  serviceAreas: [
+    "\u0627\u0644\u062F\u0645\u0627\u0645",
+    "\u0627\u0644\u062E\u0628\u0631",
+    "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+    "\u0627\u0644\u062C\u0628\u064A\u0644",
+    "\u0627\u0644\u062C\u0628\u064A\u0644 \u0627\u0644\u0635\u0646\u0627\u0639\u064A\u0629",
+    "\u0627\u0644\u0642\u0637\u064A\u0641",
+    "\u0633\u064A\u0647\u0627\u062A",
+    "\u0635\u0641\u0648\u0649",
+    "\u0631\u0623\u0633 \u062A\u0646\u0648\u0631\u0629",
+    "\u0628\u0642\u064A\u0642",
+  ],
+  navItems: [
+    { label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+    { label: "\u062E\u062F\u0645\u0627\u062A\u0646\u0627", href: "/services" },
+    { label: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/areas" },
+    { label: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629", href: "/blog" },
+    { label: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
+  ],
+} as const;
