@@ -48,9 +48,8 @@ export function HomeHero() {
   React.useEffect(() => {
     if (!mounted) return;
 
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-    const intervalId = window.setInterval(() => {
+    let timeoutId: number | null = null;
+    const intervalId: number = window.setInterval(() => {
       setServiceVisible(false);
 
       timeoutId = window.setTimeout(() => {
@@ -61,6 +60,7 @@ export function HomeHero() {
 
     return () => {
       window.clearInterval(intervalId);
+
       if (timeoutId !== null) {
         window.clearTimeout(timeoutId);
       }
