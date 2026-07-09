@@ -29,14 +29,13 @@ export function MobileNav() {
       </SheetTrigger>
 
       <SheetContent side="right" className="w-[92vw] max-w-sm border-border/70 bg-background/98 px-0">
-        <SheetHeader className="px-6 text-right">
-          <SheetTitle asChild>
-            <Logo href="" size="sm" />
-          </SheetTitle>
-          <SheetDescription className="text-right leading-7">
-            {"\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629"}
-          </SheetDescription>
-        </SheetHeader>
+    <SheetHeader className="px-6 text-right">
+  <Logo href="/" size="sm" />
+
+  <SheetDescription className="text-right leading-7">
+    استعرض خدماتنا ومشاريعنا وتواصل معنا بسهولة.
+  </SheetDescription>
+</SheetHeader>
 
         <div className="mt-6 px-6">
           <div className="mb-5 flex items-center gap-2 rounded-2xl border border-border/70 bg-card px-4 py-3 text-sm text-muted-foreground">

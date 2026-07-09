@@ -131,16 +131,7 @@ export function HomeHero() {
             </div>
           </div>
 
-          <div className="absolute -bottom-6 -right-6 hidden aspect-square w-40 overflow-hidden rounded-3xl border border-border/70 shadow-xl lg:block">
-            <Image
-              src={marbleImages.heroSecondary}
-              alt="\u062A\u0641\u0635\u064A\u0644 \u0631\u062E\u0627\u0645"
-              fill
-              loading="lazy"
-              sizes="160px"
-              className="object-cover"
-            />
-          </div>
+     
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 export const marbleImages = {
-  hero: "/images/logo.jpg",
+  hero: "/images/herosection.jpeg",
   heroSecondary: "/images/logo.jpg",
 
   services: {
@@ -8,6 +8,7 @@ export const marbleImages = {
     stairs: "/images/services/marble-stairs.jpeg",
     kitchen: "/images/services/marble-kitchen.jpeg",
     ceramic: "/images/services/ceramic-porcelain.jpeg",
+    polish: "/images/services/marble-installation.jpeg",
   },
 
   projects: [
@@ -17,4 +18,4 @@ export const marbleImages = {
     "/images/services/marble-kitchen.jpeg",
     "/images/services/ceramic-porcelain.jpeg",
   ],
-} as const;
+} as const

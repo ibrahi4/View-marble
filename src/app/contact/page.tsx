@@ -29,22 +29,24 @@ export const metadata: Metadata = createMetadata({
 const contactMethods = [
   {
     icon: PhoneCall,
-    label: "\u0627\u062A\u0635\u0627\u0644 \u0645\u0628\u0627\u0634\u0631",
+    label: "اتصال مباشر",
     value: siteConfig.phoneDisplay,
     href: `tel:${siteConfig.phone}`,
+    external: false,
   },
   {
     icon: MessageCircle,
-    label: "\u0648\u0627\u062A\u0633\u0627\u0628",
-    value: "\u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0627\u0644\u0641\u0648\u0631\u064A",
+    label: "واتساب",
+    value: "التواصل الفوري",
     href: `https://wa.me/${siteConfig.whatsapp}`,
     external: true,
   },
   {
     icon: Mail,
-    label: "\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A",
+    label: "البريد الإلكتروني",
     value: siteConfig.email,
     href: `mailto:${siteConfig.email}`,
+    external: false,
   },
 ] as const;
 
@@ -82,8 +84,8 @@ export default function ContactPage() {
                   <Link
                     key={method.label}
                     href={method.href}
-                    target={method.external ? "_blank" : undefined}
-                    rel={method.external ? "noreferrer" : undefined}
+            target={method.external === true ? "_blank" : undefined}
+rel={method.external === true ? "noreferrer" : undefined}
                     className="luxury-card group flex items-center gap-4 rounded-[24px] p-6"
                   >
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
