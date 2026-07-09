@@ -81,7 +81,7 @@ export function HomeHero() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/62 to-black/86" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/62 via-black/52 to-black/26" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,165,92,0.22),transparent_45%)]" />
       </div>
 
