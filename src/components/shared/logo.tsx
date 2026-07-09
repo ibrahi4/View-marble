@@ -12,9 +12,9 @@ type LogoProps = {
 };
 
 const sizeMap = {
-  sm: { box: "h-10 w-10", eyebrow: "text-[12px] tracking-[0.44em]", name: "text-base" },
-  md: { box: "h-15 w-15", eyebrow: "text-[11px] tracking-[0.48em]", name: "text-xl" },
-  lg: { box: "h-16 w-16", eyebrow: "text-[16px] tracking-[0.49em]", name: "text-xl" },
+  sm: { box: "h-10 w-10", sub: "text-[11px]", name: "text-base" },
+  md: { box: "h-12 w-12", sub: "text-xs", name: "text-lg" },
+  lg: { box: "h-14 w-14", sub: "text-sm", name: "text-xl" },
 } as const;
 
 export function Logo({
@@ -28,10 +28,10 @@ export function Logo({
   const isLight = variant === "light";
 
   const content = (
-    <div className={cn("group flex items-center gap-3", className)}>
+    <div className={cn("group flex items-center gap-3.5", className)}>
       <div
         className={cn(
-          "relative overflow-hidden rounded-4xl border shadow-sm transition-transform duration-500 group-hover:scale-[1.03]",
+          "relative overflow-hidden rounded-xl border shadow-sm transition-transform duration-500 group-hover:scale-[1.03]",
           dims.box,
           isLight ? "border-white/15 bg-white/8" : "border-border/70 bg-card"
         )}
@@ -40,7 +40,7 @@ export function Logo({
           src="/images/logo.jpg"
           alt={`${siteConfig.name} ${siteConfig.nameAr}`}
           fill
-          sizes="56px"
+          sizes="(max-width: 768px) 48px, 64px"
           priority
           className="object-cover"
         />
@@ -51,26 +51,25 @@ export function Logo({
       </div>
 
       {showText ? (
-        <div className="flex flex-col leading-tight">
-              <span
+        <div className="flex flex-col justify-center text-right">
+          <span
             className={cn(
-              "mt-1 font-semibold",
+              "font-bold tracking-tight",
               dims.name,
               isLight ? "text-primary-foreground" : "text-foreground"
             )}
           >
-         شركة {siteConfig.nameAr} 
+            {siteConfig.nameAr}
           </span>
           <span
             className={cn(
-              "font-medium uppercase",
-              dims.eyebrow,
-              isLight ? "text-primary-foreground/60" : "text-muted-foreground"
+              "mt-0.5 font-medium",
+              dims.sub,
+              isLight ? "text-primary-foreground/70" : "text-muted-foreground"
             )}
           >
-            لتوريد وتركيب الرخام
+            {"\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0641\u0627\u062E\u0631"}
           </span>
-      
         </div>
       ) : null}
     </div>
