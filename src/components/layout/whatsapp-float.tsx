@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, PhoneCall, Send, X } from "lucide-react";
@@ -45,11 +46,13 @@ export function WhatsappFloat() {
   if (!mounted) return null;
 
   const phoneHref = `tel:${siteConfig.phone.replace(/\s+/g, "")}`;
+  const fullName = `${siteConfig.name} ${siteConfig.nameAr}`;
 
   return (
     <div
       dir="ltr"
-      className="pointer-events-none fixed bottom-5 left-4 z-50 md:bottom-8 md:left-6"
+      className="pointer-events-none fixed left-4 z-50 md:left-6"
+      style={{ bottom: "calc(1rem + env(safe-area-inset-bottom))" }}
     >
       <div
         ref={panelRef}
@@ -93,8 +96,14 @@ export function WhatsappFloat() {
                     <span className="h-1.5 w-1.5 rounded-full bg-white" />
                   </div>
                 </div>
-                <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/10">
-                  <span className="text-lg font-semibold">V</span>
+                <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white/30 bg-white shadow-md">
+                  <Image
+                    src="/images/logo.jpg"
+                    alt={fullName}
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
                   <span className="absolute -bottom-0.5 -left-0.5 h-3 w-3 rounded-full border-2 border-[#25D366] bg-white" />
                 </div>
               </div>
