@@ -1,0 +1,2810 @@
+=========================================
+VIEW - SEO AUDIT SNAPSHOT
+Generated: 2026-07-10 17:04:05
+Root: C:\View\view
+=========================================
+
+=========================================
+FILE: next.config.ts
+=========================================
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
+  productionBrowserSourceMaps: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+  async headers() {
+    const securityHeaders = [
+      { key: "X-DNS-Prefetch-Control", value: "on" },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      {
+        key: "Permissions-Policy",
+        value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+      },
+      {
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      },
+    ];
+
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+    ];
+  },
+};
+
+export default nextConfig;
+
+=========================================
+FILE: package.json
+=========================================
+{
+  "name": "view",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.6.0",
+    "@hookform/resolvers": "^5.4.0",
+    "@radix-ui/react-slot": "^1.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "lucide-react": "^1.23.0",
+    "next": "16.2.10",
+    "next-sitemap": "^4.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.81.0",
+    "shadcn": "^4.13.0",
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+
+
+=========================================
+FILE: tsconfig.json
+=========================================
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+
+=========================================
+FILE: src\app\layout.tsx
+=========================================
+import type { ReactNode } from "react";
+import type { Viewport } from "next";
+import { Cairo } from "next/font/google";
+import { Analytics } from "@/components/layout/analytics";
+import { CallFloat } from "@/components/layout/call-float";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { SkipToContent } from "@/components/layout/skip-to-content";
+import { StickyContactBar } from "@/components/layout/sticky-contact-bar";
+import { WhatsappFloat } from "@/components/layout/whatsapp-float";
+import { GlobalStructuredData } from "@/components/seo/global-structured-data";
+import { createMetadata } from "@/lib/seo";
+import "./globals.css";
+
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  display: "swap",
+  variable: "--font-cairo",
+  preload: true,
+  adjustFontFallback: true,
+});
+
+export const metadata = createMetadata();
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b1712" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "light",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  return (
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
+      <body className={`${cairo.variable} font-sans bg-background text-foreground antialiased`}>
+        <SkipToContent />
+        <ScrollProgress />
+        <GlobalStructuredData />
+        <Analytics />
+        <div className="min-h-screen pb-24 md:pb-0">{children}</div>
+        <ScrollToTop />
+        <WhatsappFloat />
+        <CallFloat />
+        <StickyContactBar />
+      </body>
+    </html>
+  );
+}
+
+=========================================
+FILE: src\app\page.tsx
+=========================================
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { HomeAboutPreview } from "@/components/sections/home/home-about-preview";
+import { HomeCoverage } from "@/components/sections/home/home-coverage";
+import { HomeFaq } from "@/components/sections/home/home-faq";
+import { HomeFinalCta } from "@/components/sections/home/home-final-cta";
+import { HomeHero } from "@/components/sections/home/home-hero";
+import { HomeProcess } from "@/components/sections/home/home-process";
+import { HomeProjects } from "@/components/sections/home/home-projects";
+import { HomeServices } from "@/components/sections/home/home-services";
+import { HomeTestimonials } from "@/components/sections/home/home-testimonials";
+import { HomeTrust } from "@/components/sections/home/home-trust";
+import { Newsletter } from "@/components/sections/shared/newsletter";
+import { Reveal } from "@/components/shared/reveal";
+
+export default function HomePage() {
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <HomeHero />
+
+        <Reveal><HomeTrust /></Reveal>
+        <Reveal><HomeServices /></Reveal>
+        <Reveal><HomeProjects /></Reveal>
+        <Reveal><HomeAboutPreview /></Reveal>
+        <Reveal><HomeCoverage /></Reveal>
+        <Reveal><HomeProcess /></Reveal>
+        <Reveal><HomeTestimonials /></Reveal>
+        <Reveal><HomeFaq /></Reveal>
+        <Reveal><Newsletter /></Reveal>
+        <Reveal><HomeFinalCta /></Reveal>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\sitemap.ts
+=========================================
+import type { MetadataRoute } from "next";
+import { areas } from "@/config/areas";
+import { blogPosts } from "@/config/blog";
+import { services } from "@/config/services";
+import { absoluteUrl } from "@/lib/seo";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: absoluteUrl("/"), lastModified: now, changeFrequency: "weekly", priority: 1 },
+    { url: absoluteUrl("/services"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: absoluteUrl("/areas"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: absoluteUrl("/blog"), lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: absoluteUrl("/about"), lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: absoluteUrl("/contact"), lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+  ];
+
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
+    url: absoluteUrl(`/services/${service.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const areaRoutes: MetadataRoute.Sitemap = areas.map((area) => ({
+    url: absoluteUrl(`/areas/${area.slug}`),
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.85,
+  }));
+
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: absoluteUrl(`/blog/${post.slug}`),
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...areaRoutes, ...blogRoutes];
+}
+
+=========================================
+FILE: src\app\robots.ts
+=========================================
+import type { MetadataRoute } from "next";
+import { absoluteUrl } from "@/lib/seo";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+    ],
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: absoluteUrl("/"),
+  };
+}
+
+=========================================
+FILE: src\app\manifest.ts
+=========================================
+import type { MetadataRoute } from "next";
+import { siteConfig } from "@/config/site";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: `${siteConfig.name} ${siteConfig.nameAr}`,
+    short_name: siteConfig.name,
+    description: siteConfig.description,
+    start_url: "/",
+    display: "standalone",
+    background_color: "#f8f4ed",
+    theme_color: "#4f463c",
+    lang: "ar-SA",
+    dir: "rtl",
+  };
+}
+
+=========================================
+FILE: src\app\globals.css
+=========================================
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.985 0.007 85.6);
+  --foreground: oklch(0.225 0.018 52.3);
+  --card: oklch(0.995 0.004 84.7);
+  --card-foreground: oklch(0.225 0.018 52.3);
+  --popover: oklch(0.995 0.004 84.7);
+  --popover-foreground: oklch(0.225 0.018 52.3);
+  --primary: oklch(0.28 0.028 48.5);
+  --primary-foreground: oklch(0.985 0.006 84.5);
+  --secondary: oklch(0.945 0.012 83.1);
+  --secondary-foreground: oklch(0.27 0.018 50.3);
+  --muted: oklch(0.955 0.008 83.8);
+  --muted-foreground: oklch(0.495 0.014 53.4);
+  --accent: oklch(0.92 0.018 77.5);
+  --accent-foreground: oklch(0.27 0.018 50.3);
+  --destructive: oklch(0.62 0.22 27.5);
+  --border: oklch(0.89 0.01 80.2);
+  --input: oklch(0.89 0.01 80.2);
+  --ring: oklch(0.48 0.03 50.8);
+  --gold: oklch(0.72 0.09 74);
+  --gold-soft: oklch(0.82 0.06 78);
+  --radius: 1rem;
+}
+
+.dark {
+  --background: oklch(0.18 0.012 53.6);
+  --foreground: oklch(0.95 0.008 84.9);
+  --card: oklch(0.22 0.01 51.4);
+  --card-foreground: oklch(0.95 0.008 84.9);
+  --popover: oklch(0.22 0.01 51.4);
+  --popover-foreground: oklch(0.95 0.008 84.9);
+  --primary: oklch(0.76 0.03 74.5);
+  --primary-foreground: oklch(0.18 0.012 53.6);
+  --secondary: oklch(0.28 0.01 52.8);
+  --secondary-foreground: oklch(0.95 0.008 84.9);
+  --muted: oklch(0.28 0.01 52.8);
+  --muted-foreground: oklch(0.76 0.01 78.9);
+  --accent: oklch(0.3 0.012 52.9);
+  --accent-foreground: oklch(0.95 0.008 84.9);
+  --destructive: oklch(0.65 0.22 27.5);
+  --border: oklch(0.33 0.01 52.2);
+  --input: oklch(0.33 0.01 52.2);
+  --ring: oklch(0.76 0.03 74.5);
+  --gold: oklch(0.78 0.09 74);
+  --gold-soft: oklch(0.68 0.06 78);
+}
+
+@theme inline {
+  --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.375rem);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01" 1, "cv02" 1, "kern" 1, "liga" 1;
+    letter-spacing: -0.005em;
+    line-height: 1.75;
+    background-image:
+      radial-gradient(circle at 12% 12%, color-mix(in oklab, var(--gold) 8%, transparent) 0, transparent 40%),
+      radial-gradient(circle at 88% 88%, color-mix(in oklab, var(--primary) 6%, transparent) 0, transparent 42%);
+    background-attachment: fixed;
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--gold) 65%, var(--ring));
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 20%, white);
+    color: var(--foreground);
+  }
+
+  img, svg, video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 220px 220px;
+    z-index: 1;
+  }
+
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(to left,
+      transparent,
+      color-mix(in oklab, var(--gold) 55%, transparent),
+      transparent);
+  }
+
+  .gold-text {
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--gold) 90%, white),
+      color-mix(in oklab, var(--gold) 55%, var(--foreground)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .luxury-card {
+    position: relative;
+    background: color-mix(in oklab, var(--card) 92%, transparent);
+    border: 1px solid color-mix(in oklab, var(--border) 90%, transparent);
+    box-shadow:
+      0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
+      0 20px 60px -30px color-mix(in oklab, var(--foreground) 25%, transparent);
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 400ms ease;
+    will-change: transform;
+  }
+
+  .luxury-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--gold) 45%, var(--border));
+    box-shadow:
+      0 1px 0 color-mix(in oklab, white 70%, transparent) inset,
+      0 32px 80px -30px color-mix(in oklab, var(--foreground) 32%, transparent);
+  }
+}
+
+=========================================
+FILE: src\app\loading.tsx
+=========================================
+import { Logo } from "@/components/shared/logo";
+
+export default function Loading() {
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-background/85 backdrop-blur">
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative">
+          <div aria-hidden className="absolute inset-0 -m-1 animate-ping rounded-2xl border border-[color:var(--gold)]/40" />
+          <Logo href="" showText={false} size="md" />
+        </div>
+        <div className="text-[11px] font-medium uppercase tracking-[0.44em] text-muted-foreground">
+          View
+        </div>
+      </div>
+    </div>
+  );
+}
+
+=========================================
+FILE: src\app\not-found.tsx
+=========================================
+import Link from "next/link";
+import { ArrowUpLeft, Home, PhoneCall } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
+
+export default function NotFound() {
+  return (
+    <main className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 py-24">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 right-1/2 h-[520px] w-[520px] translate-x-1/2 rounded-full bg-primary/8 blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 h-[380px] w-[380px] rounded-full bg-[color:var(--gold)]/18 blur-3xl" />
+      </div>
+
+      <div className="mx-auto w-full max-w-2xl text-center">
+        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/85 px-4 py-2 text-sm text-muted-foreground shadow-sm backdrop-blur">
+          <span className="tracking-[0.28em]">404</span>
+        </div>
+
+        <h1 className="mt-8 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          {"\u0627\u0644\u0635\u0641\u062D\u0629 "}
+          <span className="gold-text">
+            {"\u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F\u0629"}
+          </span>
+        </h1>
+
+        <p className="mx-auto mt-5 max-w-md text-base leading-8 text-muted-foreground">
+          {"\u064A\u0628\u062F\u0648 \u0623\u0646 \u0627\u0644\u0631\u0627\u0628\u0637 \u0627\u0644\u0630\u064A \u062D\u0627\u0648\u0644\u062A \u0627\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u064A\u0647 \u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631. \u064A\u0645\u0643\u0646\u0643 \u0627\u0644\u0639\u0648\u062F\u0629 \u0644\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629 \u0623\u0648 \u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0645\u0628\u0627\u0634\u0631\u0629."}
+        </p>
+
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Button asChild size="lg">
+            <Link href="/">
+              <Home className="h-4 w-4" />
+              <span>{"\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629"}</span>
+              <ArrowUpLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+
+          <Button asChild variant="outline" size="lg">
+            <Link href={`tel:${siteConfig.phone}`}>
+              <PhoneCall className="h-4 w-4" />
+              <span>{"\u0627\u062A\u0635\u0644 \u0628\u0646\u0627"}</span>
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+=========================================
+FILE: src\app\icon\route.tsx
+=========================================
+import { ImageResponse } from "next/og";
+
+export const runtime = "edge";
+export const contentType = "image/png";
+export const size = { width: 64, height: 64 };
+
+export async function GET() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          background: "#3a2f22",
+          color: "#f6f1e7",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 36,
+          fontWeight: 700,
+          fontFamily: "system-ui, sans-serif",
+          borderRadius: 14,
+        }}
+      >
+        V
+      </div>
+    ),
+    { ...size }
+  );
+}
+
+=========================================
+FILE: src\app\opengraph-image\route.tsx
+=========================================
+import { ImageResponse } from "next/og";
+import { siteConfig } from "@/config/site";
+
+export const runtime = "edge";
+export const contentType = "image/png";
+export const size = { width: 1200, height: 630 };
+
+export async function GET() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 80,
+          background:
+            "linear-gradient(135deg, #f6f1e7 0%, #ece2cf 55%, #d9c9a8 100%)",
+          fontFamily: "system-ui, sans-serif",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <div
+            style={{
+              width: 76,
+              height: 76,
+              borderRadius: 22,
+              background: "#3a2f22",
+              color: "#f6f1e7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 34,
+              fontWeight: 700,
+            }}
+          >
+            V
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span
+              style={{
+                fontSize: 20,
+                letterSpacing: 12,
+                color: "#7a6a52",
+                textTransform: "uppercase",
+              }}
+            >
+              View
+            </span>
+            <span style={{ fontSize: 42, fontWeight: 700, color: "#2b241a" }}>
+              {siteConfig.nameAr}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <div
+            style={{
+              fontSize: 68,
+              fontWeight: 700,
+              color: "#2b241a",
+              lineHeight: 1.15,
+              maxWidth: 980,
+            }}
+          >
+            {"\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0648\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645"}
+          </div>
+
+          <div
+            style={{
+              fontSize: 30,
+              color: "#5d4f3b",
+              maxWidth: 900,
+            }}
+          >
+            {"\u0627\u0644\u062F\u0645\u0627\u0645 \u00B7 \u0627\u0644\u062E\u0628\u0631 \u00B7 \u0627\u0644\u0638\u0647\u0631\u0627\u0646 \u00B7 \u0627\u0644\u062C\u0628\u064A\u0644 \u00B7 \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629"}
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderTop: "1px solid rgba(58,47,34,0.2)",
+            paddingTop: 24,
+          }}
+        >
+          <div style={{ fontSize: 22, color: "#5d4f3b" }}>view.sa</div>
+          <div
+            style={{
+              fontSize: 20,
+              letterSpacing: 8,
+              color: "#7a6a52",
+              textTransform: "uppercase",
+            }}
+          >
+            Marble Studio
+          </div>
+        </div>
+      </div>
+    ),
+    { ...size }
+  );
+}
+
+=========================================
+FILE: src\app\about\page.tsx
+=========================================
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  ArrowUpLeft,
+  Award,
+  BadgeCheck,
+  Clock3,
+  Gem,
+  MessageCircle,
+  PhoneCall,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { marbleImages } from "@/config/images";
+import { siteConfig } from "@/config/site";
+import { createMetadata } from "@/lib/seo";
+
+export const revalidate = 86400;
+
+export const metadata: Metadata = createMetadata({
+  title: "\u0645\u0646 \u0646\u062D\u0646",
+  description:
+    "\u062A\u0639\u0631\u0641 \u0639\u0644\u0649 \u0641\u064A\u0648 View - \u0634\u0631\u0643\u0629 \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+  path: "/about",
+});
+
+const values = [
+  {
+    icon: Gem,
+    title: "\u062E\u0627\u0645\u0627\u062A \u0645\u0646\u062A\u0642\u0627\u0629",
+    description: "\u0646\u062E\u062A\u0627\u0631 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u0635\u0627\u062F\u0631 \u0644\u0646\u0642\u062F\u0645 \u0631\u062E\u0627\u0645 \u064A\u0644\u064A\u0642 \u0628\u0627\u0644\u0645\u0633\u0627\u062D\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "\u062F\u0642\u0629 \u0641\u064A \u0627\u0644\u062A\u0646\u0641\u064A\u0630",
+    description: "\u0645\u0639\u0627\u064A\u0646\u0629 \u062F\u0642\u064A\u0642\u0629\u060C \u062A\u0631\u0643\u064A\u0628 \u0645\u062F\u0631\u0648\u0633\u060C \u0648\u0645\u062A\u0627\u0628\u0639\u0629 \u0644\u0644\u062A\u0641\u0627\u0635\u064A\u0644 \u062D\u062A\u0649 \u0627\u0644\u062A\u0633\u0644\u064A\u0645.",
+  },
+  {
+    icon: Clock3,
+    title: "\u0627\u0644\u062A\u0632\u0627\u0645 \u0628\u0627\u0644\u0645\u0648\u0639\u062F",
+    description: "\u062C\u062F\u0648\u0644 \u0632\u0645\u0646\u064A \u0648\u0627\u0636\u062D \u0648\u062A\u0633\u0644\u064A\u0645 \u0641\u064A \u0627\u0644\u0648\u0642\u062A \u0627\u0644\u0645\u062D\u062F\u062F \u062F\u0648\u0646 \u062A\u0623\u062E\u064A\u0631.",
+  },
+  {
+    icon: Award,
+    title: "\u062A\u0641\u0627\u0635\u064A\u0644 \u0641\u0627\u062E\u0631\u0629",
+    description: "\u0646\u062A\u0639\u0627\u0645\u0644 \u0645\u0639 \u0643\u0644 \u062A\u0641\u0635\u064A\u0644\u0629 \u0628\u0627\u0639\u062A\u0628\u0627\u0631\u0647\u0627 \u062C\u0632\u0621\u0627\u064B \u0645\u0646 \u0627\u0644\u0647\u0648\u064A\u0629 \u0627\u0644\u0646\u0647\u0627\u0626\u064A\u0629 \u0644\u0644\u0645\u0633\u0627\u062D\u0629.",
+  },
+] as const;
+
+const journey = [
+  {
+    step: "01",
+    title: "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0631\u0624\u064A\u0629",
+    description: "\u0646\u0633\u062A\u0645\u0639 \u0644\u0623\u0641\u0643\u0627\u0631 \u0627\u0644\u0639\u0645\u064A\u0644 \u0648\u0646\u0648\u0636\u062D \u0627\u0644\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629 \u0644\u0645\u0633\u0627\u062D\u062A\u0647.",
+  },
+  {
+    step: "02",
+    title: "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u062E\u0627\u0645\u0629",
+    description: "\u0646\u0631\u0634\u062F \u0627\u0644\u0639\u0645\u064A\u0644 \u0644\u0644\u062E\u0627\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0628 \u0645\u0646 \u062D\u064A\u062B \u0627\u0644\u0644\u0648\u0646\u060C \u0627\u0644\u0645\u062A\u0627\u0646\u0629\u060C \u0648\u0627\u0644\u0625\u0646\u0647\u0627\u0621.",
+  },
+  {
+    step: "03",
+    title: "\u0627\u0644\u062A\u0646\u0641\u064A\u0630",
+    description: "\u0641\u0631\u064A\u0642 \u0645\u062A\u062E\u0635\u0635 \u064A\u0646\u0641\u0630 \u0627\u0644\u0639\u0645\u0644 \u0628\u062F\u0642\u0629 \u0645\u0639 \u0627\u0644\u0627\u0644\u062A\u0632\u0627\u0645 \u0628\u0627\u0644\u062C\u062F\u0648\u0644 \u0627\u0644\u0632\u0645\u0646\u064A.",
+  },
+  {
+    step: "04",
+    title: "\u0627\u0644\u062A\u0633\u0644\u064A\u0645 \u0648\u0627\u0644\u0645\u062A\u0627\u0628\u0639\u0629",
+    description: "\u0645\u0631\u0627\u062C\u0639\u0629 \u0646\u0647\u0627\u0626\u064A\u0629 \u062F\u0642\u064A\u0642\u0629 \u0648\u0645\u062A\u0627\u0628\u0639\u0629 \u0645\u0627 \u0628\u0639\u062F \u0627\u0644\u062A\u0633\u0644\u064A\u0645.",
+  },
+] as const;
+
+const stats = [
+  { value: "+150", label: "\u0645\u0634\u0631\u0648\u0639 \u0645\u0646\u0641\u0630" },
+  { value: "+12", label: "\u0633\u0646\u0629 \u062E\u0628\u0631\u0629" },
+  { value: "10", label: "\u0645\u0646\u0627\u0637\u0642 \u062A\u063A\u0637\u064A\u0629" },
+  { value: "100%", label: "\u0627\u0644\u062A\u0632\u0627\u0645 \u0628\u0627\u0644\u062C\u0648\u062F\u0629" },
+] as const;
+
+export default function AboutPage() {
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <section className="relative overflow-hidden border-b border-border/70 grain">
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute -top-40 right-1/2 h-[520px] w-[520px] translate-x-1/2 rounded-full bg-primary/8 blur-3xl" />
+            <div className="absolute bottom-0 left-0 h-[380px] w-[380px] rounded-full bg-[color:var(--gold)]/18 blur-3xl" />
+          </div>
+
+          <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-20">
+            <div>
+              <Breadcrumbs
+                items={[
+                  { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+                  { name: "\u0645\u0646 \u0646\u062D\u0646", href: "/about" },
+                ]}
+              />
+
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/85 px-4 py-2 text-sm text-muted-foreground shadow-sm backdrop-blur">
+                <Sparkles className="h-4 w-4 text-[color:var(--gold)]" aria-hidden />
+                <span>{"\u062E\u0628\u0631\u0629 \u062A\u0645\u062A\u062F \u0644\u0623\u0643\u062B\u0631 \u0645\u0646 \u0639\u0642\u062F"}</span>
+              </div>
+
+              <h1 className="mt-6 text-[36px] font-semibold leading-[1.14] tracking-tight sm:text-5xl lg:text-[54px]">
+                {"\u0641\u064A\u0648 "}
+                <span className="gold-text">View</span>
+                <span className="block">
+                  {"\u0627\u0633\u062A\u0648\u062F\u064A\u0648 "}
+                  <span className="gold-text">{"\u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0641\u0627\u062E\u0631"}</span>
+                </span>
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-base leading-[1.95] text-muted-foreground sm:text-lg">
+                {"\u0641\u064A\u0648 \u062A\u062E\u0635\u0635 \u0641\u064A \u062A\u0646\u0641\u064A\u0630 \u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629\u060C \u0646\u0631\u0627\u0639\u064A \u062F\u0642\u0629 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644\u060C \u062C\u0648\u062F\u0629 \u0627\u0644\u062E\u0627\u0645\u0629\u060C \u0648\u0627\u0644\u062A\u0632\u0627\u0645 \u0627\u0644\u0645\u0648\u0639\u062F\u060C \u0644\u0646\u0642\u062F\u0645 \u0644\u0644\u0639\u0645\u064A\u0644 \u0645\u0633\u0627\u062D\u0629 \u062A\u0639\u0643\u0633 \u0630\u0648\u0642\u0647 \u0627\u0644\u0631\u0641\u064A\u0639."}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button asChild size="lg">
+                  <Link href="/#quote">
+                    <span>{"\u0627\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631"}</span>
+                    <ArrowUpLeft className="h-4 w-4" aria-hidden />
+                  </Link>
+                </Button>
+
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/services">
+                    <span>{"\u062A\u0635\u0641\u062D \u0627\u0644\u062E\u062F\u0645\u0627\u062A"}</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[36px] border border-border/70 shadow-[0_40px_120px_-40px_rgba(32,27,21,0.4)]">
+              <Image
+                src={marbleImages.hero}
+                alt="View marble studio"
+                fill
+                priority
+                fetchPriority="high"
+                sizes="(max-width: 1024px) 100vw, 45vw"
+                className="object-cover"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {stats.map((item) => (
+                <div key={item.label} className="luxury-card rounded-[24px] p-6 text-center">
+                  <div className="text-4xl font-semibold tracking-tight">{item.value}</div>
+                  <div className="mt-2 text-sm text-muted-foreground">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/70 bg-card/30 grain">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <SectionHeading
+              eyebrow="VALUES"
+              title={"\u0645\u0628\u0627\u062F\u0626 \u0646\u0644\u062A\u0632\u0645 \u0628\u0647\u0627 \u0641\u064A \u0643\u0644 \u0645\u0634\u0631\u0648\u0639"}
+              description={"\u062B\u0645\u0627\u0646\u064A \u0642\u064A\u0645 \u062A\u062D\u0643\u0645 \u0642\u0631\u0627\u0631\u0627\u062A\u0646\u0627 \u0645\u0646 \u0644\u062D\u0638\u0629 \u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0625\u0644\u0649 \u0645\u0627 \u0628\u0639\u062F \u0627\u0644\u062A\u0633\u0644\u064A\u0645."}
+            />
+
+            <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {values.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="luxury-card rounded-[28px] p-6">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                      <Icon className="h-5 w-5" aria-hidden />
+                    </div>
+                    <h3 className="mt-5 text-lg font-semibold">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <SectionHeading
+              eyebrow="JOURNEY"
+              title={"\u0631\u062D\u0644\u0629 \u0627\u0644\u0639\u0645\u0644 \u0645\u0639\u0646\u0627"}
+              description={"\u0623\u0631\u0628\u0639 \u0645\u0631\u0627\u062D\u0644 \u0648\u0627\u0636\u062D\u0629 \u062A\u062C\u0639\u0644 \u0627\u0644\u0639\u0645\u0644\u064A\u0629 \u0645\u0631\u064A\u062D\u0629 \u0644\u0644\u0639\u0645\u064A\u0644 \u0648\u062A\u0636\u0645\u0646 \u0646\u062A\u064A\u062C\u0629 \u062F\u0642\u064A\u0642\u0629."}
+            />
+
+            <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {journey.map((item) => (
+                <div key={item.step} className="luxury-card rounded-[28px] p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                      <BadgeCheck className="h-5 w-5" aria-hidden />
+                    </div>
+                    <div className="text-sm font-medium text-[color:var(--gold)]">{item.step}</div>
+                  </div>
+
+                  <h3 className="mt-5 text-lg font-semibold">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-14 sm:py-20">
+          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div className="luxury-card rounded-[32px] p-8 text-center sm:p-12">
+              <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                {"\u062C\u0627\u0647\u0632 \u0644\u062A\u0628\u062F\u0623 \u0645\u0634\u0631\u0648\u0639\u0643\u061F"}
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-muted-foreground">
+                {"\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u062A\u0623\u062E\u0630 \u0645\u0639\u0627\u064A\u0646\u0629 \u0623\u0648\u0644\u064A\u0629 \u0648\u0639\u0631\u0636 \u0633\u0639\u0631 \u0645\u0646\u0627\u0633\u0628 \u0644\u0645\u0633\u0627\u062D\u062A\u0643."}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Button asChild size="lg">
+                  <Link href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noreferrer">
+                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    <span>{"\u062A\u0648\u0627\u0635\u0644 \u0639\u0628\u0631 \u0648\u0627\u062A\u0633\u0627\u0628"}</span>
+                  </Link>
+                </Button>
+
+                <Button asChild variant="outline" size="lg">
+                  <Link href={`tel:${siteConfig.phone}`}>
+                    <PhoneCall className="h-4 w-4" aria-hidden />
+                    <span>{siteConfig.phoneDisplay}</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\contact\page.tsx
+=========================================
+import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  ArrowUpLeft,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  PhoneCall,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { QuoteForm } from "@/components/sections/home/quote-form";
+import { siteConfig } from "@/config/site";
+import { createMetadata } from "@/lib/seo";
+
+export const revalidate = 86400;
+
+export const metadata: Metadata = createMetadata({
+  title: "\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627",
+  description:
+    "\u062A\u0648\u0627\u0635\u0644 \u0645\u0639 \u0641\u064A\u0648 View \u0644\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631\u060C \u0645\u0639\u0627\u064A\u0646\u0629\u060C \u0623\u0648 \u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0639\u0646 \u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+  path: "/contact",
+});
+
+const contactMethods = [
+  {
+    icon: PhoneCall,
+    label: "اتصال مباشر",
+    value: siteConfig.phoneDisplay,
+    href: `tel:${siteConfig.phone}`,
+    external: false,
+  },
+  {
+    icon: MessageCircle,
+    label: "واتساب",
+    value: "التواصل الفوري",
+    href: `https://wa.me/${siteConfig.whatsapp}`,
+    external: true,
+  },
+  {
+    icon: Mail,
+    label: "البريد الإلكتروني",
+    value: siteConfig.email,
+    href: `mailto:${siteConfig.email}`,
+    external: false,
+  },
+] as const;
+
+export default function ContactPage() {
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <Breadcrumbs
+              items={[
+                { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+                { name: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
+              ]}
+            />
+
+            <div className="mt-6">
+              <SectionHeading
+                eyebrow="CONTACT"
+                title={"\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u0628\u062F\u0621 \u0645\u0634\u0631\u0648\u0639\u0643"}
+                description={"\u0646\u0633\u062A\u0642\u0628\u0644 \u0637\u0644\u0628\u0627\u062A\u0643\u0645 \u0644\u0644\u0645\u0639\u0627\u064A\u0646\u0629 \u0648\u0637\u0644\u0628 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0641\u064A \u0623\u064A \u0648\u0642\u062A \u062E\u0644\u0627\u0644 \u0623\u0648\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u060C \u0648\u0646\u0631\u062F \u0639\u0644\u064A\u0643\u0645 \u0641\u064A \u0623\u0633\u0631\u0639 \u0648\u0642\u062A."}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            <div className="grid gap-5 md:grid-cols-3">
+              {contactMethods.map((method) => {
+                const Icon = method.icon;
+                return (
+                  <Link
+                    key={method.label}
+                    href={method.href}
+            target={method.external === true ? "_blank" : undefined}
+rel={method.external === true ? "noreferrer" : undefined}
+                    className="luxury-card group flex items-center gap-4 rounded-[24px] p-6"
+                  >
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                      <Icon className="h-6 w-6" aria-hidden />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+                        {method.label}
+                      </div>
+                      <div className="mt-1 text-base font-semibold">{method.value}</div>
+                    </div>
+                    <ArrowUpLeft className="h-4 w-4 text-muted-foreground transition-transform duration-500 group-hover:-translate-y-0.5" aria-hidden />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/70">
+          <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-20">
+            <div className="space-y-6">
+              <div className="luxury-card rounded-[28px] p-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                    <MapPin className="h-5 w-5" aria-hidden />
+                  </div>
+                  <div>
+                    <div className="text-sm uppercase tracking-[0.28em] text-muted-foreground">
+                      {"\u0627\u0644\u0645\u0648\u0642\u0639"}
+                    </div>
+                    <div className="mt-1 text-base font-semibold">
+                      {`${siteConfig.location} - ${siteConfig.region}`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="luxury-card rounded-[28px] p-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                    <Clock className="h-5 w-5" aria-hidden />
+                  </div>
+                  <div>
+                    <div className="text-sm uppercase tracking-[0.28em] text-muted-foreground">
+                      {"\u0623\u0648\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644"}
+                    </div>
+                    <div className="mt-1 text-base font-semibold">
+                      {"\u0627\u0644\u0633\u0628\u062A - \u0627\u0644\u062E\u0645\u064A\u0633 \u00B7 8\u0635 - 10\u0645"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="luxury-card rounded-[28px] p-6">
+                <h3 className="text-base font-semibold">
+                  {"\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062A\u064A \u0646\u062E\u062F\u0645\u0647\u0627"}
+                </h3>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {siteConfig.serviceAreas.map((area) => (
+                    <span
+                      key={area}
+                      className="rounded-full border border-border/70 bg-background px-3 py-1.5 text-sm text-muted-foreground"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Button asChild size="lg">
+                  <Link href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noreferrer">
+                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    <span>{"\u062A\u0648\u0627\u0635\u0644 \u0641\u0648\u0631\u064A"}</span>
+                  </Link>
+                </Button>
+
+                <Button asChild variant="outline" size="lg">
+                  <Link href={`tel:${siteConfig.phone}`}>
+                    <PhoneCall className="h-4 w-4" aria-hidden />
+                    <span>{siteConfig.phoneDisplay}</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-border/70 bg-background/60 p-6 sm:p-8">
+              <div className="mb-6">
+                <div className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+                  QUOTE
+                </div>
+                <h3 className="mt-2 text-2xl font-semibold">
+                  {"\u0627\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631 \u0645\u0628\u0627\u0634\u0631"}
+                </h3>
+              </div>
+              <QuoteForm />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\services\page.tsx
+=========================================
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { ArrowUpLeft } from "lucide-react";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { services } from "@/config/services";
+import { createMetadata } from "@/lib/seo";
+
+export const revalidate = 86400;
+
+export const metadata: Metadata = createMetadata({
+  title: "\u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629",
+  description:
+    "\u062A\u0639\u0631\u0641 \u0639\u0644\u0649 \u062E\u062F\u0645\u0627\u062A \u0641\u064A\u0648 \u0641\u064A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645\u060C \u0627\u0644\u0645\u063A\u0627\u0633\u0644\u060C \u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645\u060C \u0648\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u062A\u0634\u0637\u064A\u0628 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+  path: "/services",
+});
+
+export default function ServicesPage() {
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <Breadcrumbs
+              items={[
+                { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+                { name: "\u0627\u0644\u062E\u062F\u0645\u0627\u062A", href: "/services" },
+              ]}
+            />
+
+            <div className="mt-6">
+              <SectionHeading
+                eyebrow="SERVICES"
+                title={"\u062E\u062F\u0645\u0627\u062A \u0641\u064A\u0648 \u0627\u0644\u0645\u062A\u0643\u0627\u0645\u0644\u0629 \u0644\u0644\u0631\u062E\u0627\u0645"}
+                description={"\u062A\u0634\u0643\u064A\u0644\u0629 \u0645\u062F\u0631\u0648\u0633\u0629 \u0645\u0646 \u0627\u0644\u062E\u062F\u0645\u0627\u062A \u062A\u063A\u0637\u064A \u0645\u062A\u0637\u0644\u0628\u0627\u062A \u0627\u0644\u0641\u0644\u0644\u060C \u0627\u0644\u0642\u0635\u0648\u0631\u060C \u0648\u0627\u0644\u0645\u0634\u0627\u0631\u064A\u0639 \u0627\u0644\u062A\u062C\u0627\u0631\u064A\u0629."}
+              />
+            </div>
+
+            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {services.map((service, index) => (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
+                  className="luxury-card group block overflow-hidden rounded-[28px]"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
+                    />
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+                    <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1 text-[11px] font-medium tracking-[0.28em] text-white backdrop-blur">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold">{service.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-muted-foreground">{service.short}</p>
+
+                    <div className="mt-5 flex items-center gap-2 text-sm text-[color:var(--gold)]">
+                      <span>{"\u0627\u0639\u0631\u0641 \u0627\u0644\u0645\u0632\u064A\u062F"}</span>
+                      <ArrowUpLeft className="h-4 w-4 transition-transform duration-500 group-hover:-translate-y-0.5" aria-hidden />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\services\[slug]\page.tsx
+=========================================
+>>> FILE NOT FOUND
+
+=========================================
+FILE: src\app\areas\page.tsx
+=========================================
+import Link from "next/link";
+import type { Metadata } from "next";
+import { MapPin } from "lucide-react";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { areas } from "@/config/areas";
+import { createMetadata } from "@/lib/seo";
+
+export const revalidate = 86400;
+
+export const metadata: Metadata = createMetadata({
+  title: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062A\u064A \u0646\u062E\u062F\u0645\u0647\u0627",
+  description:
+    "\u0646\u062E\u062F\u0645 \u0627\u0644\u062F\u0645\u0627\u0645\u060C \u0627\u0644\u062E\u0628\u0631\u060C \u0627\u0644\u0638\u0647\u0631\u0627\u0646\u060C \u0627\u0644\u062C\u0628\u064A\u0644\u060C \u0648\u0627\u0644\u0642\u0637\u064A\u0641 \u0628\u062E\u062F\u0645\u0627\u062A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+  path: "/areas",
+});
+
+export default function AreasPage() {
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <Breadcrumbs
+              items={[
+                { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+                { name: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/areas" },
+              ]}
+            />
+
+            <div className="mt-6">
+              <SectionHeading
+                eyebrow="COVERAGE"
+                title={"\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062A\u064A \u062A\u063A\u0637\u064A\u0647\u0627 \u062E\u062F\u0645\u0627\u062A\u0646\u0627"}
+                description={"\u062A\u063A\u0637\u064A\u0629 \u0645\u0631\u0643\u0632\u0629 \u0641\u064A \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629 \u0645\u0639 \u062E\u062F\u0645\u0629 \u0645\u062D\u0644\u064A\u0629 \u0644\u0643\u0644 \u0645\u062F\u064A\u0646\u0629\u060C \u0627\u062E\u062A\u0631 \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0644\u0644\u0627\u0637\u0644\u0627\u0639 \u0639\u0644\u0649 \u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u062E\u062F\u0645\u0629 \u0641\u064A\u0647\u0627."}
+              />
+            </div>
+
+            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {areas.map((area) => (
+                <Link
+                  key={area.slug}
+                  href={`/areas/${area.slug}`}
+                  className="luxury-card group block rounded-[28px] p-6"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                      <MapPin className="h-5 w-5" aria-hidden />
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold">{area.name}</div>
+                      <div className="text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
+                        {area.nameEn}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="mt-5 text-sm leading-7 text-muted-foreground line-clamp-3">
+                    {area.intro}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\areas\[slug]\page.tsx
+=========================================
+>>> FILE NOT FOUND
+
+=========================================
+FILE: src\app\blog\page.tsx
+=========================================
+import type { Metadata } from "next";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { PostCard } from "@/components/sections/blog/post-card";
+import { blogPosts } from "@/config/blog";
+import { createMetadata } from "@/lib/seo";
+
+export const revalidate = 86400;
+
+export const metadata: Metadata = createMetadata({
+  title: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629",
+  description:
+    "\u0645\u0642\u0627\u0644\u0627\u062A \u0648\u0646\u0635\u0627\u0626\u062D \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u0627\u062E\u062A\u064A\u0627\u0631 \u0648\u062A\u0631\u0643\u064A\u0628 \u0648\u0635\u064A\u0627\u0646\u0629 \u0627\u0644\u0631\u062E\u0627\u0645 \u0645\u0646 \u0641\u064A\u0648 View \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+  path: "/blog",
+});
+
+export default function BlogPage() {
+  const sorted = [...blogPosts].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+
+  return (
+    <>
+      <SiteHeader />
+
+      <main id="main-content">
+        <section className="border-b border-border/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <Breadcrumbs
+              items={[
+                { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+                { name: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629", href: "/blog" },
+              ]}
+            />
+
+            <div className="mt-6">
+              <SectionHeading
+                eyebrow="INSIGHTS"
+                title={"\u0645\u0642\u0627\u0644\u0627\u062A \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u0639\u0627\u0644\u0645 \u0627\u0644\u0631\u062E\u0627\u0645"}
+                description={"\u0646\u0635\u0627\u0626\u062D \u0645\u062E\u062A\u0635\u0629 \u0645\u0646 \u0641\u0631\u064A\u0642 View \u062A\u0633\u0627\u0639\u062F\u0643 \u0641\u064A \u0627\u062A\u062E\u0627\u0630 \u0627\u0644\u0642\u0631\u0627\u0631\u0627\u062A \u0627\u0644\u0623\u0646\u0633\u0628 \u0644\u0627\u062E\u062A\u064A\u0627\u0631 \u0648\u062A\u0646\u0641\u064A\u0630 \u0648\u0635\u064A\u0627\u0646\u0629 \u0627\u0644\u0631\u062E\u0627\u0645."}
+              />
+            </div>
+
+            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {sorted.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+=========================================
+FILE: src\app\blog\[slug]\page.tsx
+=========================================
+>>> FILE NOT FOUND
+
+=========================================
+FILE: src\config\site.ts
+=========================================
+const env = {
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://view.sa",
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "+966564893699",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "+966564893699",
+  email: process.env.NEXT_PUBLIC_EMAIL ?? "hello@view.sa",
+  gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
+};
+
+const formatPhoneDisplay = (raw: string) => {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length !== 10) return raw;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+};
+
+export const siteConfig = {
+  name: "View",
+  nameAr: "\u0641\u064A\u0648",
+  url: env.url,
+  phone: env.phone,
+  phoneDisplay: formatPhoneDisplay(env.phone),
+  whatsapp: env.whatsapp,
+  email: env.email,
+  gaId: env.gaId,
+  location: "\u0627\u0644\u062F\u0645\u0627\u0645",
+  region: "\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629",
+  title:
+    "\u0641\u064A\u0648 | \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0648\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645",
+  description:
+    "\u0634\u0631\u0643\u0629 \u0641\u064A\u0648 \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645\u060C \u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645\u064A\u0629\u060C \u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645\u060C \u0648\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u062E\u0628\u0631 \u0648\u0627\u0644\u0638\u0647\u0631\u0627\u0646 \u0648\u0627\u0644\u062C\u0628\u064A\u0644 \u0648\u0645\u062D\u064A\u0637\u0647\u0627.",
+  serviceAreas: [
+    "\u0627\u0644\u062F\u0645\u0627\u0645",
+    "\u0627\u0644\u062E\u0628\u0631",
+    "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+    "\u0627\u0644\u062C\u0628\u064A\u0644",
+    "\u0627\u0644\u062C\u0628\u064A\u0644 \u0627\u0644\u0635\u0646\u0627\u0639\u064A\u0629",
+    "\u0627\u0644\u0642\u0637\u064A\u0641",
+    "\u0633\u064A\u0647\u0627\u062A",
+    "\u0635\u0641\u0648\u0649",
+    "\u0631\u0623\u0633 \u062A\u0646\u0648\u0631\u0629",
+    "\u0628\u0642\u064A\u0642",
+  ],
+  navItems: [
+    { label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+    { label: "\u062E\u062F\u0645\u0627\u062A\u0646\u0627", href: "/services" },
+    { label: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/areas" },
+    { label: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629", href: "/blog" },
+    { label: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
+  ],
+} as const;
+
+=========================================
+FILE: src\config\services.ts
+=========================================
+import { marbleImages } from "@/config/images";
+
+export type ServiceItem = {
+  slug: string;
+  title: string;
+  short: string;
+  description: string;
+  image: string;
+  features: readonly string[];
+  useCases: readonly string[];
+  keywords: readonly string[];
+};
+
+export const services: readonly ServiceItem[] = [
+  {
+    slug: "marble-supply-install",
+    title: "توريد وتركيب الرخام",
+    short: "توريد خامات منتقاة وتنفيذ دقيق للمشاريع الفاخرة.",
+    description:
+      "نقدم خدمة متكاملة لتوريد وتركيب الرخام الطبيعي والصناعي للفلل والقصور والمشاريع التجارية مع الاهتمام بأدق التفاصيل لتحقيق نتيجة فاخرة تدوم لسنوات.",
+    image: marbleImages.services.supply,
+    features: [
+      "خامات منتقاة من مصادر موثوقة",
+      "قياس دقيق ومعاينة مجانية",
+      "تنفيذ احترافي من فريق متخصص",
+      "ضمان جودة على التركيب",
+    ],
+    useCases: [
+      "الفلل والقصور",
+      "المداخل واللوبيات",
+      "المجالس والصالات",
+      "المشاريع التجارية",
+    ],
+    keywords: ["توريد وتركيب الرخام", "تركيب رخام", "مقاول رخام"],
+  },
+  {
+    slug: "ceramic-porcelain-installation",
+    title: "توريد وتركيب السيراميك والبورسلان",
+    short: "تنفيذ احترافي بدقة عالية وتشطيبات فاخرة.",
+    description:
+      "نقدم خدمات تركيب السيراميك والبورسلان للمنازل والفلل والمشاريع التجارية بأعلى معايير الجودة.",
+    image: marbleImages.services.ceramic,
+    features: [
+      "تركيب احترافي",
+      "فواصل ومحاذاة دقيقة",
+      "خامات متنوعة",
+      "تشطيبات فاخرة",
+    ],
+    useCases: [
+      "أرضيات الفلل",
+      "الحمامات والمطابخ",
+      "المحلات التجارية",
+      "الجدران الداخلية",
+    ],
+    keywords: [
+      "تركيب سيراميك",
+      "تركيب بورسلان",
+      "مقاول سيراميك وبورسلان",
+    ],
+  },
+  {
+    slug: "marble-basins",
+    title: "مغاسل رخام تفصيل",
+    short: "تصاميم مخصصة للحمامات ومساحات الغسيل.",
+    description:
+      "تصميم وتنفيذ مغاسل رخام حسب الطلب بأعلى مستويات الجودة مع تشطيبات فاخرة تجمع بين الجمال والعملية.",
+    image: marbleImages.services.basin,
+    features: [
+      "تصاميم حسب الطلب",
+      "خامات مقاومة للرطوبة",
+      "تشطيب دقيق للحواف",
+      "ألوان وخامات متنوعة",
+    ],
+    useCases: [
+      "الحمامات الرئيسية",
+      "حمامات الضيوف",
+      "المساحات التجارية",
+    ],
+    keywords: [
+      "مغاسل رخام",
+      "تفصيل مغاسل رخام",
+      "مغسلة رخام فاخرة",
+    ],
+  },
+
+  {
+    slug: "marble-stairs",
+    title: "درج السلالم",
+    short: "تشطيبات راقية تضيف لمسة فخامة للمداخل والسلالم.",
+    description:
+      "تنفيذ درج وسلالم الرخام بدقة عالية مع خيارات متنوعة من الألوان والخامات.",
+    image: marbleImages.services.stairs,
+    features: [
+      "قياسات دقيقة",
+      "تشطيب احترافي للحواف",
+      "تنسيق الألوان مع التصميم",
+      "تركيب متين وعالي الجودة",
+    ],
+    useCases: [
+      "سلالم المداخل",
+      "السلالم الداخلية",
+      "السلالم الخارجية",
+    ],
+    keywords: [
+      "درج رخام",
+      "سلالم رخام",
+      "تركيب درج رخام",
+    ],
+  },
+
+  {
+    slug: "marble-kitchen",
+    title: "رخام المطابخ والكاونترات",
+    short: "أسطح أنيقة تتحمل الاستخدام اليومي.",
+    description:
+      "تصميم وتنفيذ أسطح المطابخ والكاونترات الرخامية بخامات عالية الجودة تجمع بين المتانة والمظهر الفاخر.",
+    image: marbleImages.services.kitchen,
+    features: [
+      "مقاومة للبقع",
+      "تفصيل حسب المقاس",
+      "خيارات متعددة للحواف",
+      "تركيب احترافي",
+    ],
+    useCases: [
+      "المطابخ المنزلية",
+      "جزر المطابخ",
+      "المطاعم والكافيهات",
+    ],
+    keywords: [
+      "رخام مطابخ",
+      "كاونتر رخام",
+      "أسطح مطابخ رخام",
+    ],
+  },
+
+
+];
+
+export const getServiceBySlug = (slug: string) =>
+  services.find((service) => service.slug === slug);
+
+=========================================
+FILE: src\config\areas.ts
+=========================================
+export type AreaItem = {
+  slug: string;
+  name: string;
+  nameEn: string;
+  intro: string;
+  highlights: readonly string[];
+  keywords: readonly string[];
+};
+
+export const areas = [
+  {
+    slug: "dammam",
+    name: "\u0627\u0644\u062F\u0645\u0627\u0645",
+    nameEn: "Dammam",
+    intro:
+      "\u0646\u0642\u062F\u0645 \u062E\u062F\u0645\u0627\u062A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0644\u0644\u0641\u0644\u0644\u060C \u0627\u0644\u0642\u0635\u0648\u0631\u060C \u0648\u0627\u0644\u0645\u0634\u0627\u0631\u064A\u0639 \u0627\u0644\u062A\u062C\u0627\u0631\u064A\u0629 \u0628\u062A\u0646\u0641\u064A\u0630 \u062F\u0642\u064A\u0642 \u0648\u062E\u0627\u0645\u0627\u062A \u0645\u0646\u062A\u0642\u0627\u0629 \u062A\u0644\u064A\u0642 \u0628\u0627\u0644\u0645\u0633\u0627\u062D\u0627\u062A \u0627\u0644\u0641\u0627\u062E\u0631\u0629.",
+    highlights: [
+      "\u062A\u063A\u0637\u064A\u0629 \u0643\u0627\u0645\u0644\u0629 \u062F\u0627\u062E\u0644 \u0627\u0644\u062F\u0645\u0627\u0645",
+      "\u0645\u0639\u0627\u064A\u0646\u0629 \u0623\u0648\u0644\u064A\u0629 \u0645\u062C\u0627\u0646\u064A\u0629",
+      "\u062A\u0646\u0641\u064A\u0630 \u0644\u0644\u0641\u0644\u0644 \u0648\u0627\u0644\u0645\u0634\u0627\u0631\u064A\u0639",
+    ],
+    keywords: [
+      "\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062F\u0645\u0627\u0645",
+      "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062F\u0645\u0627\u0645",
+      "\u062F\u0631\u062C \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062F\u0645\u0627\u0645",
+      "\u0645\u0642\u0627\u0648\u0644 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062F\u0645\u0627\u0645",
+    ],
+  },
+  {
+    slug: "khobar",
+    name: "\u0627\u0644\u062E\u0628\u0631",
+    nameEn: "Khobar",
+    intro:
+      "\u062A\u0646\u0641\u064A\u0630 \u0645\u0634\u0627\u0631\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062E\u0628\u0631 \u0644\u0644\u0641\u0644\u0644 \u0627\u0644\u0631\u0627\u0642\u064A\u0629 \u0648\u0627\u0644\u0645\u062C\u0645\u0639\u0627\u062A \u0627\u0644\u062D\u062F\u064A\u062B\u0629 \u0628\u0623\u0633\u0644\u0648\u0628 \u064A\u0631\u0627\u0639\u064A \u062F\u0642\u0629 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644 \u0648\u064A\u0637\u0627\u0628\u0642 \u0627\u0644\u0630\u0648\u0642 \u0627\u0644\u0631\u0641\u064A\u0639 \u0641\u064A \u0627\u0644\u0645\u062F\u064A\u0646\u0629.",
+    highlights: [
+      "\u0641\u0644\u0644 \u0648\u0645\u062C\u0645\u0639\u0627\u062A \u062E\u0627\u0635\u0629",
+      "\u062A\u0646\u0641\u064A\u0630 \u064A\u0631\u0627\u0639\u064A \u0627\u0644\u062F\u0642\u0629 \u0648\u0627\u0644\u0630\u0648\u0642",
+      "\u062E\u062F\u0645\u0629 \u0645\u0648\u062C\u0647\u0629 \u0644\u0644\u0645\u0633\u0627\u062D\u0627\u062A \u0627\u0644\u0631\u0627\u0642\u064A\u0629",
+    ],
+    keywords: [
+      "\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062E\u0628\u0631",
+      "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062E\u0628\u0631",
+      "\u0631\u062E\u0627\u0645 \u0645\u0637\u0627\u0628\u062E \u0628\u0627\u0644\u062E\u0628\u0631",
+    ],
+  },
+  {
+    slug: "dhahran",
+    name: "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+    nameEn: "Dhahran",
+    intro:
+      "\u0646\u062E\u062F\u0645 \u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0638\u0647\u0631\u0627\u0646 \u0628\u0623\u0639\u0645\u0627\u0644 \u0631\u062E\u0627\u0645 \u062A\u0646\u0627\u0633\u0628 \u0637\u0628\u064A\u0639\u0629 \u0627\u0644\u0645\u062C\u062A\u0645\u0639\u0627\u062A \u0627\u0644\u0633\u0643\u0646\u064A\u0629 \u0627\u0644\u0631\u0627\u0642\u064A\u0629\u060C \u0645\u0639 \u0627\u0644\u062A\u0632\u0627\u0645 \u0628\u062A\u0646\u0641\u064A\u0630 \u062F\u0642\u064A\u0642 \u0648\u062E\u0627\u0645\u0627\u062A \u0645\u062E\u062A\u0627\u0631\u0629 \u062A\u0631\u0641\u0639 \u0642\u064A\u0645\u0629 \u0627\u0644\u0645\u0633\u0627\u062D\u0629.",
+    highlights: [
+      "\u062A\u0646\u0627\u0633\u0628 \u0627\u0644\u0645\u062C\u062A\u0645\u0639\u0627\u062A \u0627\u0644\u0633\u0643\u0646\u064A\u0629 \u0627\u0644\u0641\u0627\u062E\u0631\u0629",
+      "\u062A\u0641\u0627\u0635\u064A\u0644 \u0645\u062F\u0631\u0648\u0633\u0629 \u0641\u064A \u0627\u0644\u062A\u0631\u0643\u064A\u0628",
+      "\u062E\u0627\u0645\u0627\u062A \u062A\u0631\u0641\u0639 \u0642\u064A\u0645\u0629 \u0627\u0644\u0641\u0631\u0627\u063A",
+    ],
+    keywords: [
+      "\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+      "\u062F\u0631\u062C \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+      "\u0645\u0642\u0627\u0648\u0644 \u0631\u062E\u0627\u0645 \u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+    ],
+  },
+  {
+    slug: "jubail",
+    name: "\u0627\u0644\u062C\u0628\u064A\u0644",
+    nameEn: "Jubail",
+    intro:
+      "\u062A\u0646\u0641\u064A\u0630 \u0645\u0634\u0627\u0631\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062C\u0628\u064A\u0644 \u0644\u0644\u0645\u0633\u0627\u062D\u0627\u062A \u0627\u0644\u0633\u0643\u0646\u064A\u0629 \u0648\u0627\u0644\u062A\u062C\u0627\u0631\u064A\u0629\u060C \u0645\u0639 \u0627\u0644\u062A\u0632\u0627\u0645 \u0648\u0627\u0636\u062D \u0628\u0627\u0644\u062C\u062F\u0648\u0644 \u0627\u0644\u0632\u0645\u0646\u064A \u0648\u062C\u0648\u062F\u0629 \u0627\u0644\u062A\u0634\u0637\u064A\u0628 \u0627\u0644\u0646\u0647\u0627\u0626\u064A.",
+    highlights: [
+      "\u062A\u063A\u0637\u064A\u0629 \u0645\u0634\u0627\u0631\u064A\u0639 \u0633\u0643\u0646\u064A\u0629 \u0648\u062A\u062C\u0627\u0631\u064A\u0629",
+      "\u062C\u062F\u0648\u0644 \u0632\u0645\u0646\u064A \u0648\u0627\u0636\u062D",
+      "\u062A\u0634\u0637\u064A\u0628 \u0646\u0647\u0627\u0626\u064A \u062F\u0642\u064A\u0642",
+    ],
+    keywords: [
+      "\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062C\u0628\u064A\u0644",
+      "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u062C\u0628\u064A\u0644",
+      "\u0631\u062E\u0627\u0645 \u0645\u0637\u0627\u0628\u062E \u0628\u0627\u0644\u062C\u0628\u064A\u0644",
+    ],
+  },
+  {
+    slug: "qatif",
+    name: "\u0627\u0644\u0642\u0637\u064A\u0641",
+    nameEn: "Qatif",
+    intro:
+      "\u0646\u0642\u062F\u0645 \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u0642\u0637\u064A\u0641 \u0648\u0645\u0627 \u062D\u0648\u0644\u0647\u0627 \u0645\u0639 \u0627\u0644\u062A\u0632\u0627\u0645 \u0628\u062F\u0642\u0629 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644 \u0648\u062A\u0646\u0648\u0639 \u0627\u0644\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u062A\u064A \u062A\u0646\u0627\u0633\u0628 \u0627\u0644\u0630\u0648\u0642 \u0627\u0644\u0645\u062D\u0644\u064A.",
+    highlights: [
+      "\u062A\u063A\u0637\u064A\u0629 \u0627\u0644\u0642\u0637\u064A\u0641 \u0648\u0645\u062D\u064A\u0637\u0647\u0627",
+      "\u062E\u064A\u0627\u0631\u0627\u062A \u062E\u0627\u0645\u0627\u062A \u0645\u062A\u0646\u0648\u0639\u0629",
+      "\u062A\u0646\u0641\u064A\u0630 \u0645\u062F\u0631\u0648\u0633 \u064A\u0644\u064A\u0642 \u0628\u0627\u0644\u0645\u0633\u0627\u062D\u0629",
+    ],
+    keywords: [
+      "\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u0642\u0637\u064A\u0641",
+      "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u0628\u0627\u0644\u0642\u0637\u064A\u0641",
+    ],
+  },
+] as const satisfies readonly AreaItem[];
+
+export function getAreaBySlug(slug: string) {
+  return areas.find((area) => area.slug === slug);
+}
+
+=========================================
+FILE: src\config\blog.ts
+=========================================
+import { marbleImages } from "@/config/images";
+
+export type BlogPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  cover: string;
+  category: string;
+  readingMinutes: number;
+  publishedAt: string;
+  keywords: readonly string[];
+  content: readonly {
+    type: "paragraph" | "heading" | "list";
+    text?: string;
+    items?: readonly string[];
+  }[];
+};
+
+export const blogPosts = [
+  {
+    slug: "how-to-choose-marble-for-villa",
+    title: "\u0643\u064A\u0641 \u062A\u062E\u062A\u0627\u0631 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0646\u0627\u0633\u0628 \u0644\u0641\u064A\u0644\u062A\u0643",
+    excerpt:
+      "\u062F\u0644\u064A\u0644 \u0645\u062E\u062A\u0635\u0631 \u0644\u0627\u062E\u062A\u064A\u0627\u0631 \u0646\u0648\u0639 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0646\u0627\u0633\u0628 \u0644\u0644\u0641\u064A\u0644\u0627 \u062D\u0633\u0628 \u0627\u0644\u0641\u0631\u0627\u063A \u0648\u0627\u0644\u0630\u0648\u0642 \u0648\u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645.",
+    cover: marbleImages.services.supply,
+    category: "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u062E\u0627\u0645\u0629",
+    readingMinutes: 6,
+    publishedAt: "2025-01-05",
+    keywords: [
+      "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0631\u062E\u0627\u0645",
+      "\u0631\u062E\u0627\u0645 \u0641\u0644\u0644",
+      "\u0623\u0641\u0636\u0644 \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0646\u0627\u0633\u0628 \u0644\u0644\u0641\u064A\u0644\u0627 \u0642\u0631\u0627\u0631 \u064A\u0624\u062B\u0631 \u0641\u064A \u0645\u0638\u0647\u0631 \u0627\u0644\u0645\u0633\u0627\u062D\u0629 \u0648\u0642\u064A\u0645\u062A\u0647\u0627 \u0644\u0633\u0646\u0648\u0627\u062A \u0642\u0627\u062F\u0645\u0629\u060C \u0644\u0630\u0644\u0643 \u064A\u062C\u0628 \u062F\u0631\u0627\u0633\u062A\u0647 \u0628\u0639\u0646\u0627\u064A\u0629 \u0645\u0646 \u0639\u062F\u0629 \u062C\u0648\u0627\u0646\u0628.",
+      },
+      { type: "heading", text: "\u062D\u062F\u062F \u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0623\u0648\u0644\u0627\u064B" },
+      {
+        type: "paragraph",
+        text: "\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u062F\u062E\u0644 \u064A\u062E\u062A\u0644\u0641 \u0639\u0646 \u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0637\u0628\u062E\u060C \u0648\u0627\u0644\u062D\u0645\u0627\u0645\u0627\u062A \u062A\u062D\u062A\u0627\u062C \u062E\u0627\u0645\u0629 \u0645\u0642\u0627\u0648\u0645\u0629 \u0644\u0644\u0631\u0637\u0648\u0628\u0629\u060C \u0644\u0630\u0644\u0643 \u062A\u062D\u062F\u064A\u062F \u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0647\u0648 \u0627\u0644\u062E\u0637\u0648\u0629 \u0627\u0644\u0623\u0648\u0644\u0649.",
+      },
+      { type: "heading", text: "\u0627\u062E\u062A\u0631 \u0627\u0644\u0644\u0648\u0646 \u0627\u0644\u0645\u0646\u0627\u0633\u0628" },
+      {
+        type: "list",
+        items: [
+          "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0627\u0644\u0641\u0627\u062A\u062D\u0629 \u062A\u0648\u0633\u0639 \u0627\u0644\u0645\u0633\u0627\u062D\u0629 \u0648\u062A\u0639\u0637\u064A \u0625\u062D\u0633\u0627\u0633\u0627\u064B \u0628\u0627\u0644\u0641\u062E\u0627\u0645\u0629 \u0627\u0644\u0647\u0627\u062F\u0626\u0629",
+          "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0627\u0644\u062F\u0627\u0643\u0646\u0629 \u062A\u0639\u0637\u064A \u062F\u0641\u0621\u0627\u064B \u0648\u062D\u0636\u0648\u0631\u0627\u064B \u0644\u0644\u0645\u0633\u0627\u062D\u0629",
+          "\u0627\u0644\u062A\u0639\u0631\u0648\u0642 \u0627\u0644\u0637\u0628\u064A\u0639\u064A \u064A\u0632\u064A\u062F \u062C\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0644\u0643\u0646 \u064A\u062D\u062A\u0627\u062C \u062A\u0646\u0633\u064A\u0642\u0627\u064B \u062F\u0642\u064A\u0642\u0627\u064B",
+        ],
+      },
+      { type: "heading", text: "\u0627\u0647\u062A\u0645 \u0628\u062C\u0648\u062F\u0629 \u0627\u0644\u062A\u0631\u0643\u064A\u0628" },
+      {
+        type: "paragraph",
+        text: "\u062E\u0627\u0645\u0629 \u0645\u0645\u062A\u0627\u0632\u0629 \u0645\u0639 \u062A\u0631\u0643\u064A\u0628 \u0636\u0639\u064A\u0641 \u064A\u0641\u0642\u062F\u0647\u0627 \u0623\u062B\u0631\u0647\u0627\u060C \u0644\u0630\u0644\u0643 \u0627\u0644\u062A\u0639\u0627\u0645\u0644 \u0645\u0639 \u0641\u0631\u064A\u0642 \u062E\u0628\u064A\u0631 \u0645\u062B\u0644 View \u064A\u0636\u0645\u0646 \u0627\u0644\u0646\u062A\u064A\u062C\u0629 \u0627\u0644\u062A\u064A \u062A\u0644\u064A\u0642 \u0628\u0645\u0633\u0627\u062D\u062A\u0643.",
+      },
+    ],
+  },
+  {
+    slug: "marble-basins-guide",
+    title: "\u062F\u0644\u064A\u0644 \u0627\u062E\u062A\u064A\u0627\u0631 \u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0641\u0627\u062E\u0631\u0629",
+    excerpt:
+      "\u0645\u0627 \u064A\u062C\u0628 \u0645\u0639\u0631\u0641\u062A\u0647 \u0642\u0628\u0644 \u0637\u0644\u0628 \u0645\u063A\u0633\u0644\u0629 \u0631\u062E\u0627\u0645 \u062A\u0641\u0635\u064A\u0644\u060C \u0645\u0646 \u0627\u0644\u062E\u0627\u0645\u0629 \u062D\u062A\u0649 \u0627\u0644\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0646\u0647\u0627\u0626\u064A.",
+    cover: marbleImages.services.basin,
+    category: "\u0645\u063A\u0627\u0633\u0644",
+    readingMinutes: 5,
+    publishedAt: "2025-01-12",
+    keywords: [
+      "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645",
+      "\u062A\u0641\u0635\u064A\u0644 \u0645\u063A\u0633\u0644\u0629",
+      "\u0645\u063A\u0633\u0644\u0629 \u062D\u0645\u0627\u0645",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "\u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0641\u0635\u0644\u0629 \u062A\u062C\u0645\u0639 \u0628\u064A\u0646 \u0627\u0644\u062C\u0645\u0627\u0644 \u0648\u0627\u0644\u0648\u0638\u064A\u0641\u0629\u060C \u0648\u0627\u062E\u062A\u064A\u0627\u0631\u0647\u0627 \u0627\u0644\u0635\u062D\u064A\u062D \u064A\u0631\u0641\u0639 \u0645\u0633\u062A\u0648\u0649 \u062F\u064A\u0643\u0648\u0631 \u0627\u0644\u062D\u0645\u0627\u0645 \u0628\u0634\u0643\u0644 \u0645\u0644\u062D\u0648\u0638.",
+      },
+      { type: "heading", text: "\u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u062E\u0627\u0645\u0627\u062A \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629" },
+      {
+        type: "list",
+        items: [
+          "\u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0637\u0628\u064A\u0639\u064A \u0644\u0644\u0641\u062E\u0627\u0645\u0629 \u0627\u0644\u0642\u0635\u0648\u0649",
+          "\u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0635\u0646\u0627\u0639\u064A \u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0623\u0639\u0644\u0649 \u0644\u0644\u0628\u0642\u0639",
+          "\u062E\u0627\u0645\u0627\u062A \u062E\u0641\u064A\u0641\u0629 \u0627\u0644\u0648\u0632\u0646 \u0644\u062A\u0637\u0628\u064A\u0642\u0627\u062A \u0645\u062D\u062F\u062F\u0629",
+        ],
+      },
+      { type: "heading", text: "\u0623\u0634\u0643\u0627\u0644 \u0627\u0644\u0645\u063A\u0633\u0644\u0629" },
+      {
+        type: "paragraph",
+        text: "\u064A\u0645\u0643\u0646 \u062A\u0641\u0635\u064A\u0644 \u0627\u0644\u0645\u063A\u0633\u0644\u0629 \u0628\u0634\u0643\u0644 \u0645\u062F\u0645\u062C \u0645\u0639 \u0627\u0644\u062F\u064A\u0643\u0648\u0631 \u0623\u0648 \u0643\u0642\u0637\u0639\u0629 \u0645\u0633\u062A\u0642\u0644\u0629\u060C \u062D\u0633\u0628 \u0645\u0633\u0627\u062D\u0629 \u0627\u0644\u062D\u0645\u0627\u0645 \u0648\u0627\u0644\u0637\u0627\u0628\u0639 \u0627\u0644\u0645\u0637\u0644\u0648\u0628.",
+      },
+    ],
+  },
+  {
+    slug: "marble-maintenance-tips",
+    title: "\u0646\u0635\u0627\u0626\u062D \u0644\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u0644\u0645\u0639\u0629 \u0627\u0644\u0631\u062E\u0627\u0645",
+    excerpt:
+      "\u062E\u0637\u0648\u0627\u062A \u0628\u0633\u064A\u0637\u0629 \u0648\u0641\u0639\u0627\u0644\u0629 \u0644\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u0644\u0645\u0639\u0629 \u0648\u062C\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0645\u0646\u0632\u0644\u0643 \u0644\u0623\u0637\u0648\u0644 \u0641\u062A\u0631\u0629.",
+    cover: marbleImages.services.polish,
+    category: "\u0635\u064A\u0627\u0646\u0629",
+    readingMinutes: 4,
+    publishedAt: "2025-01-18",
+    keywords: [
+      "\u0635\u064A\u0627\u0646\u0629 \u0631\u062E\u0627\u0645",
+      "\u062A\u0644\u0645\u064A\u0639 \u0631\u062E\u0627\u0645",
+      "\u0646\u0638\u0627\u0641\u0629 \u0627\u0644\u0631\u062E\u0627\u0645",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "\u0627\u0644\u0631\u062E\u0627\u0645 \u062E\u0627\u0645\u0629 \u062D\u0633\u0627\u0633\u0629 \u062A\u062D\u062A\u0627\u062C \u0644\u0644\u0639\u0646\u0627\u064A\u0629 \u0627\u0644\u062F\u0648\u0631\u064A\u0629 \u0644\u062A\u062D\u0627\u0641\u0638 \u0639\u0644\u0649 \u0644\u0645\u0639\u062A\u0647\u0627 \u0648\u0645\u0638\u0647\u0631\u0647\u0627 \u0627\u0644\u0641\u0627\u062E\u0631\u060C \u0648\u0623\u064A \u0625\u0647\u0645\u0627\u0644 \u0642\u062F \u064A\u0644\u062D\u0642 \u0628\u0647\u0627 \u0623\u0636\u0631\u0627\u0631\u0627\u064B \u062F\u0627\u0626\u0645\u0629.",
+      },
+      { type: "heading", text: "\u0646\u0635\u0627\u0626\u062D \u064A\u0648\u0645\u064A\u0629" },
+      {
+        type: "list",
+        items: [
+          "\u062A\u062C\u0646\u0628 \u0627\u0644\u0645\u0646\u0638\u0641\u0627\u062A \u0627\u0644\u062D\u0645\u0636\u064A\u0629 \u0645\u062B\u0644 \u0627\u0644\u0644\u064A\u0645\u0648\u0646 \u0648\u0627\u0644\u062E\u0644",
+          "\u0627\u0645\u0633\u062D \u0627\u0644\u0628\u0642\u0639 \u0641\u0648\u0631\u0627\u064B \u0642\u0628\u0644 \u062A\u063A\u0644\u063A\u0644\u0647\u0627",
+          "\u0627\u0633\u062A\u062E\u062F\u0645 \u0642\u0637\u0639\u0629 \u0642\u0645\u0627\u0634 \u0646\u0627\u0639\u0645\u0629 \u0644\u0644\u062A\u0646\u0638\u064A\u0641 \u0627\u0644\u064A\u0648\u0645\u064A",
+          "\u0627\u0637\u0644\u0628 \u062A\u0644\u0645\u064A\u0639\u0627\u064B \u0627\u062D\u062A\u0631\u0627\u0641\u064A\u0627\u064B \u0645\u0631\u0629 \u0643\u0644 6 \u0623\u0634\u0647\u0631",
+        ],
+      },
+    ],
+  },
+] as const satisfies readonly BlogPost[];
+
+export function getPostBySlug(slug: string) {
+  return blogPosts.find((post) => post.slug === slug);
+}
+
+=========================================
+FILE: src\config\faq.ts
+=========================================
+export const faqItems = [
+  {
+    q: "\u0645\u0627 \u0647\u064A \u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062A\u064A \u062A\u062E\u062F\u0645\u0648\u0646\u0647\u0627\u061F",
+    a: "\u0646\u062E\u062F\u0645 \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629 \u0628\u0627\u0644\u0643\u0627\u0645\u0644 \u0648\u0639\u0644\u0649 \u0631\u0623\u0633\u0647\u0627 \u0627\u0644\u062F\u0645\u0627\u0645\u060C \u0627\u0644\u062E\u0628\u0631\u060C \u0627\u0644\u0638\u0647\u0631\u0627\u0646\u060C \u0627\u0644\u062C\u0628\u064A\u0644\u060C \u0627\u0644\u0642\u0637\u064A\u0641\u060C \u0633\u064A\u0647\u0627\u062A\u060C \u0635\u0641\u0648\u0649\u060C \u0631\u0623\u0633 \u062A\u0646\u0648\u0631\u0629\u060C \u0648\u0628\u0642\u064A\u0642.",
+  },
+  {
+    q: "\u0647\u0644 \u062A\u0648\u0641\u0631\u0648\u0646 \u0645\u0639\u0627\u064A\u0646\u0629 \u0645\u062C\u0627\u0646\u064A\u0629\u061F",
+    a: "\u0646\u0639\u0645\u060C \u0646\u0648\u0641\u0631 \u0645\u0639\u0627\u064A\u0646\u0629 \u0623\u0648\u0644\u064A\u0629 \u062F\u0627\u062E\u0644 \u0645\u062F\u0646 \u0627\u0644\u062A\u063A\u0637\u064A\u0629 \u0627\u0644\u0623\u0633\u0627\u0633\u064A\u0629 \u0644\u062A\u0642\u064A\u064A\u0645 \u0627\u0644\u0645\u0648\u0642\u0639 \u0648\u062A\u0642\u062F\u064A\u0645 \u0639\u0631\u0636 \u0633\u0639\u0631 \u062F\u0642\u064A\u0642 \u0645\u0646\u0627\u0633\u0628 \u0644\u0644\u0645\u0634\u0631\u0648\u0639.",
+  },
+  {
+    q: "\u0645\u0627 \u0647\u064A \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u062A\u0648\u0641\u0631\u0629\u061F",
+    a: "\u0646\u0648\u0641\u0631 \u062A\u0634\u0643\u064A\u0644\u0629 \u0648\u0627\u0633\u0639\u0629 \u0645\u0646 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0637\u0628\u064A\u0639\u064A \u0648\u0627\u0644\u0635\u0646\u0627\u0639\u064A\u060C \u062A\u0634\u0645\u0644 \u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0648\u0627\u0644\u062E\u0627\u0645\u0627\u062A \u0627\u0644\u062A\u064A \u062A\u0646\u0627\u0633\u0628 \u0627\u0644\u062A\u0635\u0627\u0645\u064A\u0645 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0648\u0627\u0644\u0630\u0648\u0642 \u0627\u0644\u0631\u0641\u064A\u0639.",
+  },
+  {
+    q: "\u0643\u0645 \u064A\u0633\u062A\u063A\u0631\u0642 \u062A\u0646\u0641\u064A\u0630 \u0627\u0644\u0645\u0634\u0631\u0648\u0639\u061F",
+    a: "\u064A\u062E\u062A\u0644\u0641 \u062D\u0633\u0628 \u0645\u0633\u0627\u062D\u0629 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u062A\u0641\u0627\u0635\u064A\u0644\u0647\u060C \u0648\u064A\u062A\u0645 \u062A\u062D\u062F\u064A\u062F \u062C\u062F\u0648\u0644 \u0632\u0645\u0646\u064A \u0648\u0627\u0636\u062D \u0648\u0645\u0644\u062A\u0632\u0645 \u0628\u0639\u062F \u0627\u0644\u0645\u0639\u0627\u064A\u0646\u0629 \u0627\u0644\u0623\u0648\u0644\u064A\u0629.",
+  },
+  {
+    q: "\u0647\u0644 \u062A\u0642\u062F\u0645\u0648\u0646 \u0636\u0645\u0627\u0646\u0627\u064B \u0639\u0644\u0649 \u0627\u0644\u062A\u0631\u0643\u064A\u0628\u061F",
+    a: "\u0646\u0639\u0645\u060C \u0646\u0642\u062F\u0645 \u0636\u0645\u0627\u0646\u0627\u064B \u0639\u0644\u0649 \u0627\u0644\u062A\u0631\u0643\u064A\u0628 \u064A\u063A\u0637\u064A \u062C\u0648\u062F\u0629 \u0627\u0644\u062A\u0646\u0641\u064A\u0630 \u0648\u062F\u0642\u0629 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644\u060C \u0645\u0639 \u0645\u062A\u0627\u0628\u0639\u0629 \u0645\u0627 \u0628\u0639\u062F \u0627\u0644\u062A\u0633\u0644\u064A\u0645.",
+  },
+  {
+    q: "\u0647\u0644 \u064A\u0645\u0643\u0646\u0643\u0645 \u062A\u0646\u0641\u064A\u0630 \u062A\u0635\u0627\u0645\u064A\u0645 \u062E\u0627\u0635\u0629\u061F",
+    a: "\u0628\u0627\u0644\u062A\u0623\u0643\u064A\u062F\u060C \u0646\u0639\u0645\u0644 \u0639\u0644\u0649 \u062A\u0646\u0641\u064A\u0630 \u062A\u0635\u0627\u0645\u064A\u0645 \u0645\u062E\u0635\u0635\u0629 \u062D\u0633\u0628 \u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0639\u0645\u064A\u0644 \u0623\u0648 \u0628\u0627\u0644\u062A\u0646\u0633\u064A\u0642 \u0645\u0639 \u0645\u0635\u0645\u0645 \u0627\u0644\u062F\u064A\u0643\u0648\u0631.",
+  },
+] as const;
+
+=========================================
+FILE: src\config\images.ts
+=========================================
+export const marbleImages = {
+  hero: "/images/herosection.jpeg",
+  heroSecondary: "/images/logo.jpg",
+
+  services: {
+    supply: "/images/services/marble-installation.jpeg",
+    basin: "/images/services/marble-basin.jpeg",
+    stairs: "/images/services/marble-stairs.jpeg",
+    kitchen: "/images/services/marble-kitchen.jpeg",
+    ceramic: "/images/services/ceramic-porcelain.jpeg",
+    polish: "/images/services/marble-installation.jpeg",
+  },
+
+  projects: [
+    "/images/services/marble-installation.jpeg",
+    "/images/services/marble-basin.jpeg",
+    "/images/services/marble-stairs.jpeg",
+    "/images/services/marble-kitchen.jpeg",
+    "/images/services/ceramic-porcelain.jpeg",
+  ],
+} as const
+
+=========================================
+FILE: src\config\whatsapp-widget.ts
+=========================================
+export const whatsappWidget = {
+  agentName: "\u0641\u0631\u064A\u0642 View",
+  agentTitle: "\u0645\u062A\u0627\u062D\u0648\u0646 \u0644\u062E\u062F\u0645\u062A\u0643",
+  greeting: "\u0645\u0631\u062D\u0628\u0627\u064B \u0628\u0643 \u0641\u064A View",
+  subGreeting: "\u0643\u064A\u0641 \u064A\u0645\u0643\u0646\u0646\u0627 \u062E\u062F\u0645\u062A\u0643 \u0627\u0644\u064A\u0648\u0645\u061F",
+  quickMessagesTitle: "\u0631\u0633\u0627\u0626\u0644 \u0633\u0631\u064A\u0639\u0629",
+  quickMessages: [
+    "\u0623\u062D\u062A\u0627\u062C \u0639\u0631\u0636 \u0633\u0639\u0631 \u0644\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0631\u062E\u0627\u0645",
+    "\u0623\u0631\u064A\u062F \u0627\u0644\u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0639\u0646 \u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0641\u0635\u0644\u0629",
+    "\u0623\u062D\u062A\u0627\u062C \u062A\u0646\u0641\u064A\u0630 \u062F\u0631\u062C \u0633\u0644\u0627\u0644\u0645 \u0631\u062E\u0627\u0645",
+    "\u0623\u0631\u064A\u062F \u062D\u062C\u0632 \u0645\u0648\u0639\u062F \u0645\u0639\u0627\u064A\u0646\u0629",
+  ],
+  startChat: "\u0627\u0628\u062F\u0623 \u0627\u0644\u0645\u062D\u0627\u062F\u062B\u0629",
+  orCall: "\u0623\u0648 \u0627\u062A\u0635\u0644 \u0627\u0644\u0622\u0646",
+} as const;
+
+=========================================
+FILE: src\lib\seo.ts
+=========================================
+import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
+
+type CreateMetadataParams = {
+  title?: string;
+  description?: string;
+  path?: string;
+  keywords?: string[];
+  noIndex?: boolean;
+};
+
+const defaultKeywords = [
+  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645",
+  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645 \u0631\u062E\u0627\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062F\u0645\u0627\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062E\u0628\u0631",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062C\u0628\u064A\u0644",
+  "\u062A\u0641\u0635\u064A\u0644 \u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645",
+  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
+] as const;
+
+export function absoluteUrl(path = "/") {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return new URL(normalizedPath, siteConfig.url).toString();
+}
+
+export function createMetadata({
+  title,
+  description,
+  path = "/",
+  keywords = [],
+  noIndex = false,
+}: CreateMetadataParams = {}): Metadata {
+  const pageDescription = description ?? siteConfig.description;
+  const canonicalUrl = absoluteUrl(path);
+  const businessName = `${siteConfig.name} ${siteConfig.nameAr}`;
+  const resolvedKeywords = Array.from(new Set([...defaultKeywords, ...keywords]));
+  const ogImage = absoluteUrl("/opengraph-image");
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: title
+      ? title
+      : {
+          default: siteConfig.title,
+          template: `%s | ${siteConfig.name}`,
+        },
+    description: pageDescription,
+    applicationName: businessName,
+    manifest: "/manifest.webmanifest",
+    keywords: resolvedKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    category: "\u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628",
+    openGraph: {
+      type: "website",
+      locale: "ar_SA",
+      url: canonicalUrl,
+      title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+      description: pageDescription,
+      siteName: businessName,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: businessName,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+      description: pageDescription,
+      images: [ogImage],
+    },
+    robots: noIndex
+      ? { index: false, follow: false }
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+            "max-video-preview": -1,
+          },
+        },
+  };
+}
+
+=========================================
+FILE: src\lib\schema.ts
+=========================================
+import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/lib/seo";
+
+const businessName = `${siteConfig.name} ${siteConfig.nameAr}`;
+
+const serviceNames = [
+  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u062A\u0641\u0635\u064A\u0644",
+  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0637\u0627\u0628\u062E \u0648\u0627\u0644\u0643\u0627\u0648\u0646\u062A\u0631\u0627\u062A",
+  "\u0643\u0633\u0648\u0629 \u0627\u0644\u062C\u062F\u0631\u0627\u0646 \u0648\u0627\u0644\u0623\u0631\u0636\u064A\u0627\u062A",
+  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
+] as const;
+
+export function organizationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": absoluteUrl("/#organization"),
+    name: businessName,
+    url: absoluteUrl("/"),
+    email: siteConfig.email,
+    telephone: `+${siteConfig.whatsapp}`,
+    logo: absoluteUrl("/icon"),
+  };
+}
+
+export function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": absoluteUrl("/#website"),
+    name: businessName,
+    url: absoluteUrl("/"),
+    inLanguage: "ar-SA",
+  };
+}
+
+export function localBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    "@id": absoluteUrl("/#local-business"),
+    name: businessName,
+    description: siteConfig.description,
+    url: absoluteUrl("/"),
+    email: siteConfig.email,
+    telephone: `+${siteConfig.whatsapp}`,
+    image: absoluteUrl("/opengraph-image"),
+    priceRange: "SAR",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.location,
+      addressRegion: siteConfig.region,
+      addressCountry: "SA",
+    },
+    areaServed: siteConfig.serviceAreas.map((area) => ({
+      "@type": "City",
+      name: area,
+    })),
+    serviceType: [...serviceNames],
+    knowsAbout: [...serviceNames],
+    availableLanguage: ["ar", "en"],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+        opens: "08:00",
+        closes: "22:00",
+      },
+    ],
+  };
+}
+
+export function servicesListSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": absoluteUrl("/#services"),
+    name: "\u062E\u062F\u0645\u0627\u062A View",
+    itemListElement: serviceNames.map((name, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name,
+    })),
+  };
+}
+
+export function breadcrumbSchema(
+  items: { name: string; url: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.url),
+    })),
+  };
+}
+
+export function faqSchema(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+}
+
+=========================================
+FILE: src\lib\utils.ts
+=========================================
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+=========================================
+FILE: src\lib\quote-schema.ts
+=========================================
+import { z } from "zod";
+
+export const serviceOptions = [
+  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u062A\u0641\u0635\u064A\u0644",
+  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0637\u0627\u0628\u062E \u0648\u0627\u0644\u0643\u0627\u0648\u0646\u062A\u0631\u0627\u062A",
+  "\u0643\u0633\u0648\u0629 \u0627\u0644\u062C\u062F\u0631\u0627\u0646 \u0648\u0627\u0644\u0623\u0631\u0636\u064A\u0627\u062A",
+  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0623\u062E\u0631\u0649",
+] as const;
+
+export const areaOptions = [
+  "\u0627\u0644\u062F\u0645\u0627\u0645",
+  "\u0627\u0644\u062E\u0628\u0631",
+  "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+  "\u0627\u0644\u062C\u0628\u064A\u0644",
+  "\u0627\u0644\u0642\u0637\u064A\u0641",
+  "\u0633\u064A\u0647\u0627\u062A",
+  "\u0635\u0641\u0648\u0649",
+  "\u0631\u0623\u0633 \u062A\u0646\u0648\u0631\u0629",
+  "\u0628\u0642\u064A\u0642",
+  "\u0623\u062E\u0631\u0649",
+] as const;
+
+export const quoteSchema = z.object({
+  name: z
+    .string({ error: "\u0627\u0644\u0627\u0633\u0645 \u0645\u0637\u0644\u0648\u0628" })
+    .trim()
+    .min(1, { message: "\u0627\u0644\u0627\u0633\u0645 \u0645\u0637\u0644\u0648\u0628" })
+    .min(2, { message: "\u0627\u0644\u0627\u0633\u0645 \u0642\u0635\u064A\u0631 \u062C\u062F\u0627\u064B" })
+    .max(60, { message: "\u0627\u0644\u0627\u0633\u0645 \u0637\u0648\u064A\u0644 \u062C\u062F\u0627\u064B" }),
+
+  phone: z
+    .string({ error: "\u0631\u0642\u0645 \u0627\u0644\u062C\u0648\u0627\u0644 \u0645\u0637\u0644\u0648\u0628" })
+    .trim()
+    .min(1, { message: "\u0631\u0642\u0645 \u0627\u0644\u062C\u0648\u0627\u0644 \u0645\u0637\u0644\u0648\u0628" })
+    .regex(/^(?:\+?966|0)?5\d{8}$/, {
+      message: "\u0623\u062F\u062E\u0644 \u0631\u0642\u0645 \u0633\u0639\u0648\u062F\u064A \u0635\u062D\u064A\u062D",
+    }),
+
+  area: z.enum(areaOptions, {
+    error: "\u0627\u062E\u062A\u0631 \u0627\u0644\u0645\u0646\u0637\u0642\u0629",
+  }),
+
+  service: z.enum(serviceOptions, {
+    error: "\u0627\u062E\u062A\u0631 \u0627\u0644\u062E\u062F\u0645\u0629",
+  }),
+
+  message: z
+    .string()
+    .trim()
+    .max(600, { message: "\u0627\u0644\u0631\u0633\u0627\u0644\u0629 \u0637\u0648\u064A\u0644\u0629 \u062C\u062F\u0627\u064B" })
+    .optional()
+    .or(z.literal("")),
+});
+
+export type QuoteFormValues = z.infer<typeof quoteSchema>;
+
+=========================================
+FILE: src\lib\whatsapp.ts
+=========================================
+import { siteConfig } from "@/config/site";
+import type { QuoteFormValues } from "@/lib/quote-schema";
+
+export function buildQuoteWhatsappUrl(values: QuoteFormValues) {
+  const lines = [
+    "\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631 - View \u0641\u064A\u0648",
+    "",
+    `\u0627\u0644\u0627\u0633\u0645: ${values.name}`,
+    `\u0627\u0644\u062C\u0648\u0627\u0644: ${values.phone}`,
+    `\u0627\u0644\u0645\u0646\u0637\u0642\u0629: ${values.area}`,
+    `\u0627\u0644\u062E\u062F\u0645\u0629: ${values.service}`,
+  ];
+
+  if (values.message && values.message.trim().length > 0) {
+    lines.push("", `\u062A\u0641\u0627\u0635\u064A\u0644 \u0625\u0636\u0627\u0641\u064A\u0629: ${values.message.trim()}`);
+  }
+
+  const text = encodeURIComponent(lines.join("\n"));
+  return `https://wa.me/${siteConfig.whatsapp}?text=${text}`;
+}
+
+=========================================
+FILE: src\components\seo\global-structured-data.tsx
+=========================================
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  localBusinessSchema,
+  organizationSchema,
+  servicesListSchema,
+  websiteSchema,
+} from "@/lib/schema";
+
+const structuredData = [
+  organizationSchema(),
+  websiteSchema(),
+  localBusinessSchema(),
+  servicesListSchema(),
+] as const;
+
+export function GlobalStructuredData() {
+  return (
+    <>
+      {structuredData.map((item, index) => (
+        <JsonLd key={`structured-data-${index}`} data={item} />
+      ))}
+    </>
+  );
+}
+
+=========================================
+FILE: src\components\seo\json-ld.tsx
+=========================================
+type JsonLdProps = {
+  data: Record<string, unknown>;
+};
+
+export function JsonLd({ data }: JsonLdProps) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data),
+      }}
+    />
+  );
+}
+
+=========================================
+FILE: src\components\layout\site-header.tsx
+=========================================
+import Link from "next/link";
+import { MapPin, PhoneCall } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/shared/logo";
+import { MobileNav } from "@/components/layout/mobile-nav";
+import { siteConfig } from "@/config/site";
+
+export function SiteHeader() {
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <Logo />
+
+        <nav className="hidden items-center gap-8 md:flex">
+          {siteConfig.navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-2 text-sm text-muted-foreground lg:flex">
+            <MapPin className="h-4 w-4" aria-hidden />
+            <span>{siteConfig.location}</span>
+          </div>
+
+          <Button asChild variant="outline" className="hidden sm:inline-flex">
+            <Link href={`tel:${siteConfig.phone}`}>
+              <PhoneCall className="h-4 w-4" aria-hidden />
+              <span className="tracking-wide">{siteConfig.phoneDisplay}</span>
+            </Link>
+          </Button>
+
+          <Button asChild className="hidden shadow-sm sm:inline-flex">
+            <Link href="/#quote">
+              <span>{"\u0627\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631"}</span>
+            </Link>
+          </Button>
+
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+=========================================
+FILE: src\components\layout\site-footer.tsx
+=========================================
+import Link from "next/link";
+import { Clock, Mail, MapPin, MessageCircle, PhoneCall, Sparkles } from "lucide-react";
+import { Logo } from "@/components/shared/logo";
+import { siteConfig } from "@/config/site";
+
+const footerServices = [
+  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u062A\u0641\u0635\u064A\u0644",
+  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0637\u0627\u0628\u062E",
+  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639",
+] as const;
+
+const footerLinks = [
+  { label: "\u0627\u0644\u062E\u062F\u0645\u0627\u062A", href: "/services" },
+  { label: "\u0627\u0644\u0645\u0634\u0627\u0631\u064A\u0639", href: "/#projects" },
+  { label: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/#coverage" },
+  { label: "\u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0634\u0627\u0626\u0639\u0629", href: "/#faq" },
+  { label: "\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631", href: "/#quote" },
+] as const;
+
+export function SiteFooter() {
+  return (
+    <footer id="contact" className="relative overflow-hidden border-t border-border/70 bg-primary text-primary-foreground grain">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[color:var(--gold)]/12 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-[380px] w-[380px] rounded-full bg-white/5 blur-3xl" />
+      </div>
+
+      <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.9fr_0.9fr_1fr]">
+          <div className="space-y-5">
+            <Logo variant="light" />
+
+            <p className="max-w-md text-sm leading-8 text-primary-foreground/72">
+              {siteConfig.description}
+            </p>
+
+            <div className="flex items-center gap-2 text-sm text-primary-foreground/72">
+              <Sparkles className="h-4 w-4 text-[color:var(--gold-soft)]" aria-hidden />
+              <span>
+                {"\u0641\u062E\u0627\u0645\u0629 \u062A\u0638\u0647\u0631 \u0641\u064A \u0643\u0644 \u062A\u0641\u0635\u064A\u0644\u0629"}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-primary-foreground/70">
+              {"\u0627\u0644\u062E\u062F\u0645\u0627\u062A"}
+            </h3>
+            <ul className="space-y-3 text-sm text-primary-foreground/78">
+              {footerServices.map((service) => (
+                <li key={service} className="transition-colors hover:text-primary-foreground">
+                  {service}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-primary-foreground/70">
+              {"\u0631\u0648\u0627\u0628\u0637 \u0633\u0631\u064A\u0639\u0629"}
+            </h3>
+            <ul className="space-y-3 text-sm">
+              {footerLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-primary-foreground/78 transition-colors hover:text-primary-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-5">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-primary-foreground/70">
+              {"\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627"}
+            </h3>
+
+            <div className="space-y-3 text-sm">
+              <Link
+                href={`tel:${siteConfig.phone}`}
+                className="flex items-center gap-3 text-primary-foreground/85 transition-colors hover:text-primary-foreground"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/12 bg-white/8">
+                  <PhoneCall className="h-4 w-4" aria-hidden />
+                </div>
+                <span className="tracking-wide">{siteConfig.phoneDisplay}</span>
+              </Link>
+
+              <Link
+                href={`https://wa.me/${siteConfig.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 text-primary-foreground/85 transition-colors hover:text-primary-foreground"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/12 bg-white/8">
+                  <MessageCircle className="h-4 w-4" aria-hidden />
+                </div>
+                <span>{"\u0648\u0627\u062A\u0633\u0627\u0628"}</span>
+              </Link>
+
+              <Link
+                href={`mailto:${siteConfig.email}`}
+                className="flex items-center gap-3 text-primary-foreground/85 transition-colors hover:text-primary-foreground"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/12 bg-white/8">
+                  <Mail className="h-4 w-4" aria-hidden />
+                </div>
+                <span>{siteConfig.email}</span>
+              </Link>
+
+              <div className="flex items-center gap-3 text-primary-foreground/85">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/12 bg-white/8">
+                  <MapPin className="h-4 w-4" aria-hidden />
+                </div>
+                <span>{`${siteConfig.location} - ${siteConfig.region}`}</span>
+              </div>
+
+              <div className="flex items-center gap-3 text-primary-foreground/85">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/12 bg-white/8">
+                  <Clock className="h-4 w-4" aria-hidden />
+                </div>
+                <span>
+                  {"\u0627\u0644\u0633\u0628\u062A - \u0627\u0644\u062E\u0645\u064A\u0633 \u00B7 8\u0635 - 10\u0645"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.28em] text-primary-foreground/70">
+            {"\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062A\u064A \u0646\u062E\u062F\u0645\u0647\u0627"}
+          </h3>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {siteConfig.serviceAreas.map((area) => (
+              <span
+                key={area}
+                className="rounded-full border border-white/12 bg-white/5 px-4 py-1.5 text-sm text-primary-foreground/80"
+              >
+                {area}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-14 border-t border-white/10 pt-6 text-sm text-primary-foreground/60">
+          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+            <div>
+              {`\u00A9 ${new Date().getFullYear()} ${siteConfig.name} ${siteConfig.nameAr}. \u062C\u0645\u064A\u0639 \u0627\u0644\u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638\u0629.`}
+            </div>
+            <div className="tracking-[0.22em]">
+              VIEW MARBLE STUDIO
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+=========================================
+FILE: src\components\layout\analytics.tsx
+=========================================
+import Script from "next/script";
+import { siteConfig } from "@/config/site";
+
+export function Analytics() {
+  const gaId = siteConfig.gaId;
+
+  if (!gaId) return null;
+
+  return (
+    <>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        strategy="afterInteractive"
+      />
+      <Script id="ga-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${gaId}', { anonymize_ip: true });
+        `}
+      </Script>
+    </>
+  );
+}
+
+=========================================
+FILE: src\components\layout\skip-to-content.tsx
+=========================================
+export function SkipToContent() {
+  return (
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-[70] focus:rounded-full focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:shadow-lg"
+    >
+      {"\u062A\u062E\u0637\u064A \u0625\u0644\u0649 \u0627\u0644\u0645\u062D\u062A\u0648\u0649"}
+    </a>
+  );
+}
+
+=========================================
+FILE: src\components\layout\scroll-progress.tsx
+=========================================
+"use client";
+
+import { useEffect, useState } from "react";
+import { useMounted } from "@/hooks/use-mounted";
+
+export function ScrollProgress() {
+  const mounted = useMounted();
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const update = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const value = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setProgress(value);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [mounted]);
+
+  if (!mounted) return null;
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[2px] bg-transparent"
+    >
+      <div
+        className="h-full origin-right bg-gradient-to-l from-[color:var(--gold)] via-[color:var(--gold-soft)] to-transparent transition-[width] duration-150 ease-out"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  );
+}
+
+=========================================
+FILE: src\components\shared\logo.tsx
+=========================================
+import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
+
+type LogoProps = {
+  href?: string;
+  showText?: boolean;
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "light";
+  className?: string;
+};
+
+const sizeMap = {
+  sm: { box: "h-10 w-10", sub: "text-[11px]", name: "text-base" },
+  md: { box: "h-12 w-12", sub: "text-xs", name: "text-lg" },
+  lg: { box: "h-14 w-14", sub: "text-sm", name: "text-xl" },
+} as const;
+
+export function Logo({
+  href = "/",
+  showText = true,
+  size = "md",
+  variant = "default",
+  className,
+}: LogoProps) {
+  const dims = sizeMap[size];
+  const isLight = variant === "light";
+
+  const content = (
+    <div className={cn("group flex items-center gap-3.5", className)}>
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-xl border shadow-sm transition-transform duration-500 group-hover:scale-[1.03]",
+          dims.box,
+          isLight ? "border-white/15 bg-white/8" : "border-border/70 bg-card"
+        )}
+      >
+        <Image
+          src="/images/logo.jpg"
+          alt={`${siteConfig.name} ${siteConfig.nameAr}`}
+          fill
+          sizes="(max-width: 768px) 48px, 64px"
+          priority
+          className="object-cover"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_60%)]"
+        />
+      </div>
+
+      {showText ? (
+        <div className="flex flex-col justify-center text-right">
+          <span
+            className={cn(
+              "font-bold tracking-tight",
+              dims.name,
+              isLight ? "text-primary-foreground" : "text-foreground"
+            )}
+          >
+            {siteConfig.nameAr}
+          </span>
+          <span
+            className={cn(
+              "mt-0.5 font-medium",
+              dims.sub,
+              isLight ? "text-primary-foreground/70" : "text-muted-foreground"
+            )}
+          >
+            {"\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0627\u0644\u0641\u0627\u062E\u0631"}
+          </span>
+        </div>
+      ) : null}
+    </div>
+  );
+
+  if (!href) return content;
+
+  return (
+    <Link href={href} aria-label={`${siteConfig.name} ${siteConfig.nameAr}`}>
+      {content}
+    </Link>
+  );
+}
+
+=========================================
+FILE: src\components\shared\breadcrumbs.tsx
+=========================================
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbSchema } from "@/lib/schema";
+
+type BreadcrumbItem = {
+  name: string;
+  href: string;
+};
+
+type BreadcrumbsProps = {
+  items: BreadcrumbItem[];
+};
+
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
+  return (
+    <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
+      <JsonLd
+        data={breadcrumbSchema(items.map((item) => ({ name: item.name, url: item.href })))}
+      />
+
+      <ol className="flex flex-wrap items-center gap-2">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+
+          return (
+            <li key={item.href} className="flex items-center gap-2">
+              {isLast ? (
+                <span className="text-foreground">{item.name}</span>
+              ) : (
+                <Link href={item.href} className="transition-colors hover:text-foreground">
+                  {item.name}
+                </Link>
+              )}
+              {!isLast ? <ChevronLeft className="h-3.5 w-3.5 opacity-60" aria-hidden /> : null}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+=========================================
+FILE: src\components\shared\section-heading.tsx
+=========================================
+import { cn } from "@/lib/utils";
+
+type SectionHeadingProps = {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  align?: "start" | "center";
+};
+
+export function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  align = "start",
+}: SectionHeadingProps) {
+  return (
+    <div className={cn("max-w-3xl", align === "center" && "mx-auto text-center")}>
+      <p className="text-xs font-medium uppercase tracking-[0.38em] text-muted-foreground">
+        {eyebrow}
+      </p>
+      <h2 className="mt-5 text-3xl font-semibold leading-[1.18] tracking-tight sm:text-4xl lg:text-[42px]">
+        {title}
+      </h2>
+      {description ? (
+        <p className="mt-5 text-base leading-[1.95] text-muted-foreground sm:text-lg">
+          {description}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+

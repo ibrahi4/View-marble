@@ -7,18 +7,22 @@ type CreateMetadataParams = {
   path?: string;
   keywords?: string[];
   noIndex?: boolean;
+  ogImage?: string;
 };
 
 const defaultKeywords = [
-  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
-  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645",
-  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645 \u0631\u062E\u0627\u0645",
-  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062F\u0645\u0627\u0645",
-  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062E\u0628\u0631",
-  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0638\u0647\u0631\u0627\u0646",
-  "\u0631\u062E\u0627\u0645 \u0627\u0644\u062C\u0628\u064A\u0644",
-  "\u062A\u0641\u0635\u064A\u0644 \u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645",
-  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "توريد وتركيب الرخام",
+  "مغاسل رخام",
+  "درج السلالم رخام",
+  "واجهات رخام",
+  "رخام الدمام",
+  "رخام الخبر",
+  "رخام الظهران",
+  "رخام الجبيل",
+  "تفصيل مغاسل رخام",
+  "صيانة وتلميع الرخام",
+  "رخام المنطقة الشرقية",
+  "شركة رخام السعودية",
 ] as const;
 
 export function absoluteUrl(path = "/") {
@@ -32,39 +36,56 @@ export function createMetadata({
   path = "/",
   keywords = [],
   noIndex = false,
+  ogImage,
 }: CreateMetadataParams = {}): Metadata {
   const pageDescription = description ?? siteConfig.description;
   const canonicalUrl = absoluteUrl(path);
   const businessName = `${siteConfig.name} ${siteConfig.nameAr}`;
   const resolvedKeywords = Array.from(new Set([...defaultKeywords, ...keywords]));
-  const ogImage = absoluteUrl("/opengraph-image");
+  const image = ogImage ? absoluteUrl(ogImage) : absoluteUrl("/opengraph-image");
+
+  const resolvedTitle = title
+    ? { absolute: `${title} | ${businessName}` }
+    : {
+        default: siteConfig.title,
+        template: `%s | ${businessName}`,
+      };
 
   return {
     metadataBase: new URL(siteConfig.url),
-    title: title
-      ? title
-      : {
-          default: siteConfig.title,
-          template: `%s | ${siteConfig.name}`,
-        },
+    title: resolvedTitle,
     description: pageDescription,
     applicationName: businessName,
-    manifest: "/manifest.webmanifest",
+    authors: [{ name: businessName, url: siteConfig.url }],
+    creator: businessName,
+    publisher: businessName,
+    generator: "Next.js",
     keywords: resolvedKeywords,
+    referrer: "origin-when-cross-origin",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        "ar-SA": canonicalUrl,
+        "x-default": canonicalUrl,
+      },
     },
-    category: "\u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628",
+    category: "الرخام والتشطيبات",
     openGraph: {
       type: "website",
-      locale: "ar_SA",
+      locale: siteConfig.locale,
       url: canonicalUrl,
-      title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+      title: title ? `${title} | ${businessName}` : siteConfig.title,
       description: pageDescription,
       siteName: businessName,
+      countryName: siteConfig.countryName,
       images: [
         {
-          url: ogImage,
+          url: image,
           width: 1200,
           height: 630,
           alt: businessName,
@@ -73,22 +94,61 @@ export function createMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+      title: title ? `${title} | ${businessName}` : siteConfig.title,
       description: pageDescription,
-      images: [ogImage],
+      images: [image],
     },
+    verification: siteConfig.gscVerification
+      ? { google: siteConfig.gscVerification }
+      : undefined,
     robots: noIndex
-      ? { index: false, follow: false }
+      ? {
+          index: false,
+          follow: false,
+          googleBot: { index: false, follow: false },
+        }
       : {
           index: true,
           follow: true,
+          nocache: false,
           googleBot: {
             index: true,
             follow: true,
+            noimageindex: false,
             "max-image-preview": "large",
             "max-snippet": -1,
             "max-video-preview": -1,
           },
         },
+  };
+}
+
+export function createArticleMetadata(params: {
+  title: string;
+  description: string;
+  path: string;
+  publishedTime: string;
+  modifiedTime: string;
+  authors: string[];
+  keywords?: string[];
+  ogImage?: string;
+}): Metadata {
+  const base = createMetadata({
+    title: params.title,
+    description: params.description,
+    path: params.path,
+    keywords: params.keywords,
+    ogImage: params.ogImage,
+  });
+
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      type: "article",
+      publishedTime: params.publishedTime,
+      modifiedTime: params.modifiedTime,
+      authors: params.authors,
+    },
   };
 }

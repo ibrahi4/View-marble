@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { siteConfig } from "@/config/site";
 import { absoluteUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
@@ -7,10 +8,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/", "/_next/"],
       },
     ],
     sitemap: absoluteUrl("/sitemap.xml"),
-    host: absoluteUrl("/"),
+    host: siteConfig.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
   };
 }

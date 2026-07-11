@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: absoluteUrl(`/services/${service.slug}`),
     lastModified: now,
     changeFrequency: "monthly",
-    priority: 0.8,
+    priority: 0.85,
   }));
 
   const areaRoutes: MetadataRoute.Sitemap = areas.map((area) => ({
@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: absoluteUrl(`/blog/${post.slug}`),
-    lastModified: new Date(post.publishedAt),
+    lastModified: new Date(post.updatedAt),
     changeFrequency: "monthly",
     priority: 0.75,
   }));

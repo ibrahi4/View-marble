@@ -1,9 +1,19 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowUpLeft, Home, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "الصفحة غير موجودة",
+  description: "الرابط الذي حاولت الوصول إليه غير متوفر.",
+  noIndex: true,
+});
 
 export default function NotFound() {
+  const phoneHref = `tel:${siteConfig.phone.replace(/\s+/g, "")}`;
+
   return (
     <main className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 py-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -17,29 +27,27 @@ export default function NotFound() {
         </div>
 
         <h1 className="mt-8 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-          {"\u0627\u0644\u0635\u0641\u062D\u0629 "}
-          <span className="gold-text">
-            {"\u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F\u0629"}
-          </span>
+          الصفحة{" "}
+          <span className="gold-text">غير موجودة</span>
         </h1>
 
         <p className="mx-auto mt-5 max-w-md text-base leading-8 text-muted-foreground">
-          {"\u064A\u0628\u062F\u0648 \u0623\u0646 \u0627\u0644\u0631\u0627\u0628\u0637 \u0627\u0644\u0630\u064A \u062D\u0627\u0648\u0644\u062A \u0627\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u064A\u0647 \u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631. \u064A\u0645\u0643\u0646\u0643 \u0627\u0644\u0639\u0648\u062F\u0629 \u0644\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629 \u0623\u0648 \u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0645\u0628\u0627\u0634\u0631\u0629."}
+          يبدو أن الرابط الذي حاولت الوصول إليه غير متوفر. يمكنك العودة للصفحة الرئيسية أو التواصل معنا مباشرة.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="lg">
             <Link href="/">
-              <Home className="h-4 w-4" />
-              <span>{"\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629"}</span>
-              <ArrowUpLeft className="h-4 w-4" />
+              <Home className="h-4 w-4" aria-hidden />
+              <span>الصفحة الرئيسية</span>
+              <ArrowUpLeft className="h-4 w-4" aria-hidden />
             </Link>
           </Button>
 
           <Button asChild variant="outline" size="lg">
-            <Link href={`tel:${siteConfig.phone}`}>
-              <PhoneCall className="h-4 w-4" />
-              <span>{"\u0627\u062A\u0635\u0644 \u0628\u0646\u0627"}</span>
+            <Link href={phoneHref}>
+              <PhoneCall className="h-4 w-4" aria-hidden />
+              <span>اتصل بنا</span>
             </Link>
           </Button>
         </div>

@@ -1,77 +1,67 @@
-import { MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpLeft, MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { siteConfig } from "@/config/site";
-
-const priorityAreas = [
-  "\u0627\u0644\u062F\u0645\u0627\u0645",
-  "\u0627\u0644\u062E\u0628\u0631",
-  "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
-  "\u0627\u0644\u062C\u0628\u064A\u0644",
-] as const;
-
-const extendedAreas = siteConfig.serviceAreas.filter(
-  (area) => !priorityAreas.includes(area as (typeof priorityAreas)[number])
-);
+import { areas } from "@/config/areas";
+import { t } from "@/content/ar";
 
 export function HomeCoverage() {
   return (
-    <section id="coverage" className="border-b border-border/70">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[0.88fr_1.12fr] lg:px-8 lg:py-20">
-        <div>
+    <section
+      id="coverage"
+      className="relative border-b border-border/70"
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute bottom-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-[color:var(--gold)]/6 blur-3xl" />
+      </div>
+
+      <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeading
-            eyebrow="COVERAGE"
-            title={"\u062A\u063A\u0637\u064A\u0629 \u0645\u0631\u0643\u0632\u0629 \u062A\u062F\u0639\u0645 \u0627\u0644\u0638\u0647\u0648\u0631 \u0627\u0644\u0645\u062D\u0644\u064A"}
-            description={"\u0646\u0631\u0643\u0632 \u0627\u0644\u0627\u0633\u062A\u0647\u062F\u0627\u0641 \u0639\u0644\u0649 \u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u0623\u0643\u062B\u0631 \u0637\u0644\u0628\u0627\u064B \u0644\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u062A\u0634\u0637\u064A\u0628 \u0627\u0644\u0641\u0627\u062E\u0631 \u0641\u064A \u0627\u0644\u0634\u0631\u0642\u064A\u0629."}
+            eyebrow={t.coverage.eyebrow}
+            title={t.coverage.title}
+            description={t.coverage.description}
           />
 
-          <div className="mt-8 rounded-[28px] border border-border/70 bg-card/70 p-6 shadow-sm">
-            <h3 className="text-base font-semibold">
-              {"\u0627\u0644\u0623\u0648\u0644\u0648\u064A\u0629 \u0627\u0644\u0625\u0639\u0644\u0627\u0646\u064A\u0629"}
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">
-              {"\u0627\u0644\u062F\u0645\u0627\u0645\u060C \u0627\u0644\u062E\u0628\u0631\u060C \u0627\u0644\u0638\u0647\u0631\u0627\u0646\u060C \u0648\u0627\u0644\u062C\u0628\u064A\u0644 \u0647\u064A \u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u0623\u0646\u0633\u0628 \u0644\u0628\u062F\u0627\u064A\u0629 \u0627\u0644\u0625\u0639\u0644\u0627\u0646\u0627\u062A \u0648\u0627\u0644\u0635\u0641\u062D\u0627\u062A \u0627\u0644\u0645\u0648\u062C\u0647\u0629."}
-            </p>
-          </div>
+          <Link
+            href="/areas"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background px-5 py-3 text-sm font-medium text-foreground transition-all hover:border-[color:var(--gold)]/50 hover:shadow-sm"
+          >
+            <span>{t.common.viewAll}</span>
+            <ArrowUpLeft className="h-4 w-4" aria-hidden />
+          </Link>
         </div>
 
-        <div className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {priorityAreas.map((area) => (
-              <div
-                key={area}
-                className="rounded-[28px] border border-border/70 bg-primary/6 p-6 shadow-sm"
-              >
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {areas.map((area) => (
+            <Link
+              key={area.slug}
+              href={`/areas/${area.slug}`}
+              className="luxury-card group block rounded-[24px] p-5"
+            >
+              <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <MapPin className="h-5 w-5" />
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-[color:var(--gold)]">
+                    <MapPin className="h-5 w-5" aria-hidden />
                   </div>
                   <div>
-                    <div className="text-lg font-semibold">{area}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {"\u0623\u0648\u0644\u0648\u064A\u0629 \u0623\u0633\u0627\u0633\u064A\u0629"}
+                    <div className="text-base font-semibold">{area.name}</div>
+                    <div className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
+                      {area.nameEn}
                     </div>
                   </div>
                 </div>
+
+                <ArrowUpLeft
+                  className="h-4 w-4 text-muted-foreground transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:text-[color:var(--gold)]"
+                  aria-hidden
+                />
               </div>
-            ))}
-          </div>
 
-          <div className="rounded-[28px] border border-border/70 bg-card p-6 shadow-sm">
-            <h3 className="text-base font-semibold">
-              {"\u0645\u0646\u0627\u0637\u0642 \u062A\u063A\u0637\u064A\u0629 \u0625\u0636\u0627\u0641\u064A\u0629"}
-            </h3>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              {extendedAreas.map((area) => (
-                <span
-                  key={area}
-                  className="rounded-full border border-border/70 bg-background px-4 py-2 text-sm text-muted-foreground"
-                >
-                  {area}
-                </span>
-              ))}
-            </div>
-          </div>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground line-clamp-2">
+                {area.intro}
+              </p>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

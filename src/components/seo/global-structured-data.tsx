@@ -1,5 +1,7 @@
 import { JsonLd } from "@/components/seo/json-ld";
+import { faqItems } from "@/config/faq";
 import {
+  faqSchema,
   localBusinessSchema,
   organizationSchema,
   servicesListSchema,
@@ -11,6 +13,7 @@ const structuredData = [
   websiteSchema(),
   localBusinessSchema(),
   servicesListSchema(),
+  faqSchema([...faqItems]),
 ] as const;
 
 export function GlobalStructuredData() {
