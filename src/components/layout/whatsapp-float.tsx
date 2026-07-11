@@ -174,7 +174,7 @@ export function WhatsappFloat() {
           onClick={() => setOpen((prev) => !prev)}
           aria-label={open ? "إغلاق واتساب" : "فتح واتساب"}
           aria-expanded={open}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_15px_40px_-10px_rgba(37,211,102,0.55)] transition-transform duration-300 hover:scale-[1.06]"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_15px_40px_-10px_rgba(37,211,102,0.55)] transition-transform duration-300 hover:scale-[1.06] md:h-14 md:w-14"
         >
           {!open ? (
             <span
@@ -183,7 +183,7 @@ export function WhatsappFloat() {
             />
           ) : null}
           <span className="relative">
-            {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-6 w-6" />}
+            {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />}
           </span>
           {!open ? (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-background bg-red-500 text-[9px] font-semibold text-white">
