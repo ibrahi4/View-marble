@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import type { Viewport } from "next";
-import { Cairo } from "next/font/google";
 import { Analytics } from "@/components/layout/analytics";
 import { CallFloat } from "@/components/layout/call-float";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
@@ -12,14 +11,6 @@ import { GlobalStructuredData } from "@/components/seo/global-structured-data";
 import { siteConfig } from "@/config/site";
 import { createMetadata } from "@/lib/seo";
 import "./globals.css";
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  display: "swap",
-  variable: "--font-cairo",
-  preload: true,
-  adjustFontFallback: true,
-});
 
 export const metadata = createMetadata();
 
@@ -53,10 +44,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <script dangerouslySetInnerHTML={{ __html: gtmScript }} />
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAdsId}`} />
         <script dangerouslySetInnerHTML={{ __html: googleAdsScript }} />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${cairo.variable} font-sans bg-background text-foreground antialiased`}>
+      <body className="font-sans bg-background text-foreground antialiased">
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${siteConfig.gtmId}`}

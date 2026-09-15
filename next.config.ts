@@ -10,12 +10,6 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 60,
     deviceSizes: [384, 640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 64, 96, 128, 256, 384],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-    ],
   },
   async headers() {
     const securityHeaders = [

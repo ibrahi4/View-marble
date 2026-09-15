@@ -1,11 +1,11 @@
 const env = {
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://view.sa",
-  phone: process.env.NEXT_PUBLIC_PHONE ?? "0500000000",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "966500000000",
-  email: process.env.NEXT_PUBLIC_EMAIL ?? "hello@view.sa",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://viewmarble.com",
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "0564893699",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "966564893699",
+  email: process.env.NEXT_PUBLIC_EMAIL ?? "viewmarble8@gmail.com",
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-WPDJK55F",
-  googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "AW-18420443406",
+  googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "AW-6718020380",
 };
 
 const cleanDigits = (raw: string) => raw.replace(/\D/g, "");
