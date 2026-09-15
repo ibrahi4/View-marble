@@ -1,81 +1,51 @@
 const env = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://view.sa",
-  phone: process.env.NEXT_PUBLIC_PHONE ?? "+966564893699",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "+966564893699",
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "0500000000",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "966500000000",
   email: process.env.NEXT_PUBLIC_EMAIL ?? "hello@view.sa",
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
-  gscVerification: process.env.NEXT_PUBLIC_GSC_VERIFICATION ?? "",
+  gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-WPDJK55F",
 };
 
 const formatPhoneDisplay = (raw: string) => {
-  const cleaned = raw.replace(/[^\d+]/g, "");
-  const digits = cleaned.replace(/^\+?966/, "").replace(/^0/, "");
-  if (digits.length !== 9) return raw;
-  return `+966 ${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5)}`;
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length !== 10) return raw;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
 };
-
-const normalizeDigits = (raw: string) => raw.replace(/[^\d]/g, "");
 
 export const siteConfig = {
   name: "View",
-  nameAr: "فيو",
+  nameAr: "\u0641\u064A\u0648",
   url: env.url,
   phone: env.phone,
   phoneDisplay: formatPhoneDisplay(env.phone),
-  phoneDigits: normalizeDigits(env.phone),
   whatsapp: env.whatsapp,
-  whatsappDigits: normalizeDigits(env.whatsapp),
   email: env.email,
   gaId: env.gaId,
-  gscVerification: env.gscVerification,
-  location: "الدمام",
-  region: "المنطقة الشرقية",
-  country: "SA",
-  countryName: "المملكة العربية السعودية",
-  locale: "ar_SA",
-  founded: "2013",
+  gtmId: env.gtmId,
+  location: "\u0627\u0644\u062F\u0645\u0627\u0645",
+  region: "\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629",
   title:
-    "فيو | توريد وتركيب الرخام والمغاسل ودرج السلالم في الدمام والمنطقة الشرقية",
+    "\u0641\u064A\u0648 | \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645 \u0648\u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0648\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645",
   description:
-    "شركة فيو متخصصة في توريد وتركيب الرخام، المغاسل الرخامية، درج السلالم، وواجهات الرخام الفاخرة في الدمام والخبر والظهران والجبيل والمنطقة الشرقية بجودة تناسب الفلل والقصور والمشاريع التجارية.",
-  geo: {
-    latitude: 26.4207,
-    longitude: 50.0888,
-  },
-  address: {
-    street: "المنطقة الشرقية",
-    city: "الدمام",
-    region: "المنطقة الشرقية",
-    postalCode: "31411",
-    country: "SA",
-  },
-  openingHours: {
-    days: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-    opens: "08:00",
-    closes: "22:00",
-  },
+    "\u0634\u0631\u0643\u0629 \u0641\u064A\u0648 \u0645\u062A\u062E\u0635\u0635\u0629 \u0641\u064A \u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645\u060C \u0627\u0644\u0645\u063A\u0627\u0633\u0644 \u0627\u0644\u0631\u062E\u0627\u0645\u064A\u0629\u060C \u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645\u060C \u0648\u0623\u0639\u0645\u0627\u0644 \u0627\u0644\u062D\u062C\u0631 \u0627\u0644\u0641\u0627\u062E\u0631\u0629 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u062E\u0628\u0631 \u0648\u0627\u0644\u0638\u0647\u0631\u0627\u0646 \u0648\u0627\u0644\u062C\u0628\u064A\u0644 \u0648\u0645\u062D\u064A\u0637\u0647\u0627.",
   serviceAreas: [
-    "الدمام",
-    "الخبر",
-    "الظهران",
-    "الجبيل",
-    "القطيف",
-    "سيهات",
-    "صفوى",
-    "رأس تنورة",
-    "بقيق",
+    "\u0627\u0644\u062F\u0645\u0627\u0645",
+    "\u0627\u0644\u062E\u0628\u0631",
+    "\u0627\u0644\u0638\u0647\u0631\u0627\u0646",
+    "\u0627\u0644\u062C\u0628\u064A\u0644",
+    "\u0627\u0644\u062C\u0628\u064A\u0644 \u0627\u0644\u0635\u0646\u0627\u0639\u064A\u0629",
+    "\u0627\u0644\u0642\u0637\u064A\u0641",
+    "\u0633\u064A\u0647\u0627\u062A",
+    "\u0635\u0641\u0648\u0649",
+    "\u0631\u0623\u0633 \u062A\u0646\u0648\u0631\u0629",
+    "\u0628\u0642\u064A\u0642",
   ],
   navItems: [
-    { label: "الرئيسية", href: "/" },
-    { label: "خدماتنا", href: "/services" },
-    { label: "المناطق", href: "/areas" },
-    { label: "المدونة", href: "/blog" },
-    { label: "تواصل", href: "/contact" },
-  ],
-  sameAs: [
-    "https://www.google.com/maps",
-    "https://www.instagram.com/view.sa",
-    "https://twitter.com/view_sa",
-    "https://www.tiktok.com/@view.sa",
+    { label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
+    { label: "\u062E\u062F\u0645\u0627\u062A\u0646\u0627", href: "/services" },
+    { label: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/areas" },
+    { label: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629", href: "/blog" },
+    { label: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
   ],
 } as const;
