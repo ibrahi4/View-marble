@@ -7,8 +7,10 @@ const env = {
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-WPDJK55F",
 };
 
+const cleanDigits = (raw: string) => raw.replace(/\D/g, "");
+
 const formatPhoneDisplay = (raw: string) => {
-  const digits = raw.replace(/\D/g, "");
+  const digits = cleanDigits(raw);
   if (digits.length !== 10) return raw;
   return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
 };
@@ -19,7 +21,9 @@ export const siteConfig = {
   url: env.url,
   phone: env.phone,
   phoneDisplay: formatPhoneDisplay(env.phone),
+  phoneDigits: cleanDigits(env.phone),
   whatsapp: env.whatsapp,
+  whatsappDigits: cleanDigits(env.whatsapp),
   email: env.email,
   gaId: env.gaId,
   gtmId: env.gtmId,
