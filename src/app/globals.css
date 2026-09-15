@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+:root, html, body {
+  color-scheme: light !important;
+}
 
 :root {
   --background: oklch(0.985 0.007 85.6);
@@ -28,26 +30,26 @@
 }
 
 .dark {
-  --background: oklch(0.18 0.012 53.6);
-  --foreground: oklch(0.95 0.008 84.9);
-  --card: oklch(0.22 0.01 51.4);
-  --card-foreground: oklch(0.95 0.008 84.9);
-  --popover: oklch(0.22 0.01 51.4);
-  --popover-foreground: oklch(0.95 0.008 84.9);
-  --primary: oklch(0.76 0.03 74.5);
-  --primary-foreground: oklch(0.18 0.012 53.6);
-  --secondary: oklch(0.28 0.01 52.8);
-  --secondary-foreground: oklch(0.95 0.008 84.9);
-  --muted: oklch(0.28 0.01 52.8);
-  --muted-foreground: oklch(0.76 0.01 78.9);
-  --accent: oklch(0.3 0.012 52.9);
-  --accent-foreground: oklch(0.95 0.008 84.9);
-  --destructive: oklch(0.65 0.22 27.5);
-  --border: oklch(0.33 0.01 52.2);
-  --input: oklch(0.33 0.01 52.2);
-  --ring: oklch(0.76 0.03 74.5);
-  --gold: oklch(0.78 0.09 74);
-  --gold-soft: oklch(0.68 0.06 78);
+  --background: oklch(0.985 0.007 85.6);
+  --foreground: oklch(0.225 0.018 52.3);
+  --card: oklch(0.995 0.004 84.7);
+  --card-foreground: oklch(0.225 0.018 52.3);
+  --popover: oklch(0.995 0.004 84.7);
+  --popover-foreground: oklch(0.225 0.018 52.3);
+  --primary: oklch(0.28 0.028 48.5);
+  --primary-foreground: oklch(0.985 0.006 84.5);
+  --secondary: oklch(0.945 0.012 83.1);
+  --secondary-foreground: oklch(0.27 0.018 50.3);
+  --muted: oklch(0.955 0.008 83.8);
+  --muted-foreground: oklch(0.495 0.014 53.4);
+  --accent: oklch(0.92 0.018 77.5);
+  --accent-foreground: oklch(0.27 0.018 50.3);
+  --destructive: oklch(0.62 0.22 27.5);
+  --border: oklch(0.89 0.01 80.2);
+  --input: oklch(0.89 0.01 80.2);
+  --ring: oklch(0.48 0.03 50.8);
+  --gold: oklch(0.72 0.09 74);
+  --gold-soft: oklch(0.82 0.06 78);
 }
 
 @theme inline {
@@ -89,6 +91,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: 100%;
+    color-scheme: light !important;
   }
 
   html:focus-within {
@@ -105,6 +108,7 @@
       radial-gradient(circle at 88% 88%, color-mix(in oklab, var(--primary) 6%, transparent) 0, transparent 42%);
     background-attachment: fixed;
     min-height: 100dvh;
+    color-scheme: light !important;
   }
 
   h1, h2, h3, h4 {

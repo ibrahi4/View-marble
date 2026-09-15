@@ -15,10 +15,7 @@ import "./globals.css";
 export const metadata = createMetadata();
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1712" },
-  ],
+  themeColor: "#f6f1e7",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",
@@ -39,8 +36,10 @@ const googleAdsScript = `
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning style={{ colorScheme: "light" }}>
       <head>
+        <meta name="color-scheme" content="light" />
+        <meta name="supported-color-schemes" content="light" />
         <script dangerouslySetInnerHTML={{ __html: gtmScript }} />
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAdsId}`} />
         <script dangerouslySetInnerHTML={{ __html: googleAdsScript }} />
@@ -48,7 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans bg-background text-foreground antialiased">
+      <body className="font-sans bg-background text-foreground antialiased" style={{ colorScheme: "light" }}>
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${siteConfig.gtmId}`}
