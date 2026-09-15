@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import type { ComponentType } from "react";
 import {
   ArrowUpLeft,
   Clock,
@@ -20,19 +21,28 @@ import { createMetadata } from "@/lib/seo";
 export const revalidate = 86400;
 
 export const metadata: Metadata = createMetadata({
-  title: "\u062A\u0648\u0631\u0627\u0635\u0644 \u0645\u0639\u0646\u0627",
+  title: "\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627",
   description:
-    "\u062A\u0648\u0631\u0627\u0635\u0644 \u0645\u0639 \u0641\u064A\u0648 View \u0644\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631\u060C \u0645\u0639\u0627\u064A\u0646\u0629\u060C \u0623\u0648 \u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0639\u0646 \u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
+    "\u062A\u0648\u0627\u0635\u0644 \u0645\u0639 \u0641\u064A\u0648 View \u0644\u0637\u0644\u0628 \u0639\u0631\u0636 \u0633\u0639\u0631\u060C \u0645\u0639\u0627\u064A\u0646\u0629\u060C \u0623\u0648 \u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0639\u0646 \u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0631\u062E\u0627\u0645 \u0641\u064A \u0627\u0644\u062F\u0645\u0627\u0645 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629.",
   path: "/contact",
 });
 
+type ContactMethod = {
+  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  label: string;
+  value: string;
+  href: string;
+  external?: boolean;
+};
+
 export default function ContactPage() {
-  const contactMethods = [
+  const contactMethods: ContactMethod[] = [
     {
       icon: PhoneCall,
       label: "\u0627\u062A\u0635\u0627\u0644 \u0645\u0628\u0627\u0634\u0631",
       value: siteConfig.phoneDisplay,
       href: `tel:${siteConfig.phoneDigits}`,
+      external: false,
     },
     {
       icon: MessageCircle,
@@ -46,8 +56,9 @@ export default function ContactPage() {
       label: "\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A",
       value: siteConfig.email,
       href: `mailto:${siteConfig.email}`,
+      external: false,
     },
-  ] as const;
+  ];
 
   return (
     <>
@@ -59,15 +70,15 @@ export default function ContactPage() {
             <Breadcrumbs
               items={[
                 { name: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
-                { name: "\u062A\u0648\u0631\u0627\u0635\u0644", href: "/contact" },
+                { name: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
               ]}
             />
 
             <div className="mt-6">
               <SectionHeading
                 eyebrow="CONTACT"
-                title={"\u062A\u0648\u0631\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u0628\u062F\u0621 \u0645\u0634\u0631\u0648\u0639\u0643"}
-                description={"\u0646\u0633\u062A\u0642\u0628\u0644 \u0637\u0644\u0628\u0627\u062A\u0643\u0645 \u0644\u0644\u0645\u0639\u0627\u064A\u0646\u0629 \u0648\u0637\u0644\u0628 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0641\u064A \u0623\u064A \u0648\u0642\u062A \u062E\u0644\u0627\u0644 \u0623\u0648\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u060C \u0648\u0646\u0631\u062F \u0639\u0644\u064A\u0643\u0645 \u0641\u064A \u0623\u0633\u0631\u0639 \u0648\u0642\u062A."}
+                title={"\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u0628\u062F\u0621 \u0645\u0634\u0631\u0648\u0639\u0643"}
+                description={"\u0646\u0633\u062A\u0642\u0628\u0644 \u0637\u0644\u0628\u0627\u062A\u0643\u0645 \u0644\u0644\u0645\u0639\u0627\u064A\u0646\u0629 \u0648\u0637\u0644\u0628 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0641\u064A \u0623\u063A\u0644\u0628 \u0623\u0648\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u060C \u0648\u0646\u0631\u062F \u0639\u0644\u064A\u0643\u0645 \u0641\u064A \u0623\u0633\u0631\u0639 \u0648\u0642\u062A."}
               />
             </div>
           </div>
@@ -132,7 +143,7 @@ export default function ContactPage() {
                       {"\u0623\u0648\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644"}
                     </div>
                     <div className="mt-1 text-base font-semibold">
-                      {"\u0627\u0644\u0633\u0628\u062A - \u0627\u0644\u062E\u0645\u062A\u064A\u0633 \u00B7 8\u0635 - 10\u0645"}
+                      {"\u0627\u0644\u0633\u0628\u062A - \u0627\u0644\u062E\u0645\u064A\u0633 \u00B7 8\u0635 - 10\u0645"}
                     </div>
                   </div>
                 </div>
@@ -140,7 +151,7 @@ export default function ContactPage() {
 
               <div className="luxury-card rounded-[28px] p-6">
                 <h3 className="text-base font-semibold">
-                  {"\u0627\u0644\u0645\u0646\u0637\u0642 \u0627\u0644\u062A\u064A \u0646\u062E\u062F\u0645\u0647\u0627"}
+                  {"\u0627\u0644\u0645\u0646\u0637\u0642 \u0627\u0644\u062A\u063A\u0637\u064A\u0647\u0627"}
                 </h3>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {siteConfig.serviceAreas.map((area) => (

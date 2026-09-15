@@ -48,7 +48,7 @@ export const siteConfig = {
   navItems: [
     { label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", href: "/" },
     { label: "\u062E\u062F\u0645\u0627\u062A\u0646\u0627", href: "/services" },
-    { label: "\u0627\u0644\u0645\u0646\u0627\u0637\u0642", href: "/areas" },
+    { label: "\u0627\u0644\u0645\u0646\u0637\u0642", href: "/areas" },
     { label: "\u0627\u0644\u0645\u062F\u0648\u0646\u0629", href: "/blog" },
     { label: "\u062A\u0648\u0627\u0635\u0644", href: "/contact" },
   ],

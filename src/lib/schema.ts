@@ -1,18 +1,15 @@
-import type { AreaItem } from "@/config/areas";
-import type { BlogPost } from "@/config/blog";
-import type { ServiceItem } from "@/config/services";
 import { siteConfig } from "@/config/site";
 import { absoluteUrl } from "@/lib/seo";
 
 const businessName = `${siteConfig.name} ${siteConfig.nameAr}`;
 
 const serviceNames = [
-  "توريد وتركيب الرخام",
-  "مغاسل رخام تفصيل",
-  "درج السلالم",
-  "رخام المطابخ والكاونترات",
-  "واجهات الرخام",
-  "صيانة وتلميع الرخام",
+  "\u062A\u0648\u0631\u064A\u062F \u0648\u062A\u0631\u0643\u064A\u0628 \u0627\u0644\u0631\u062E\u0627\u0645",
+  "\u0645\u063A\u0627\u0633\u0644 \u0631\u062E\u0627\u0645 \u062A\u0641\u0635\u064A\u0644",
+  "\u062F\u0631\u062C \u0627\u0644\u0633\u0644\u0627\u0644\u0645",
+  "\u0631\u062E\u0627\u0645 \u0627\u0644\u0645\u0637\u0627\u0628\u062E \u0648\u0627\u0644\u0643\u0627\u0648\u0646\u062A\u0631\u0627\u062A",
+  "\u0643\u0633\u0648\u0629 \u0627\u0644\u062C\u062F\u0631\u0627\u0646 \u0648\u0627\u0644\u0623\u0631\u0636\u064A\u0627\u062A",
+  "\u0635\u064A\u0627\u0646\u0629 \u0648\u062A\u0644\u0645\u064A\u0639 \u0627\u0644\u0631\u062E\u0627\u0645",
 ] as const;
 
 export function organizationSchema() {
@@ -21,16 +18,13 @@ export function organizationSchema() {
     "@type": "Organization",
     "@id": absoluteUrl("/#organization"),
     name: businessName,
-    alternateName: [siteConfig.name, siteConfig.nameAr],
     url: absoluteUrl("/"),
     email: siteConfig.email,
-    telephone: siteConfig.phone,
+    telephone: `+${siteConfig.whatsappDigits}`,
     logo: {
       "@type": "ImageObject",
-      url: absoluteUrl("/icon"),
+      url: absoluteUrl("/images/logo.jpg"),
     },
-    foundingDate: siteConfig.founded,
-    sameAs: [...siteConfig.sameAs],
   };
 }
 
@@ -42,9 +36,6 @@ export function websiteSchema() {
     name: businessName,
     url: absoluteUrl("/"),
     inLanguage: "ar-SA",
-    publisher: {
-      "@id": absoluteUrl("/#organization"),
-    },
   };
 }
 
@@ -57,52 +48,27 @@ export function localBusinessSchema() {
     description: siteConfig.description,
     url: absoluteUrl("/"),
     email: siteConfig.email,
-    telephone: siteConfig.phone,
-    image: [absoluteUrl("/opengraph-image")],
+    telephone: `+${siteConfig.whatsappDigits}`,
     priceRange: "SAR",
-    currenciesAccepted: "SAR",
-    paymentAccepted: "Cash, Bank Transfer",
     address: {
       "@type": "PostalAddress",
-      streetAddress: siteConfig.address.street,
-      addressLocality: siteConfig.address.city,
-      addressRegion: siteConfig.address.region,
-      postalCode: siteConfig.address.postalCode,
-      addressCountry: siteConfig.address.country,
+      addressLocality: siteConfig.location,
+      addressRegion: siteConfig.region,
+      addressCountry: "SA",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: siteConfig.geo.latitude,
-      longitude: siteConfig.geo.longitude,
-    },
-    hasMap: `https://www.google.com/maps?q=${siteConfig.geo.latitude},${siteConfig.geo.longitude}`,
     areaServed: siteConfig.serviceAreas.map((area) => ({
       "@type": "City",
       name: area,
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: siteConfig.region,
-      },
     })),
     serviceType: [...serviceNames],
     knowsAbout: [...serviceNames],
     availableLanguage: ["ar", "en"],
-    sameAs: [...siteConfig.sameAs],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: [...siteConfig.openingHours.days],
-        opens: siteConfig.openingHours.opens,
-        closes: siteConfig.openingHours.closes,
-      },
-    ],
-    contactPoint: [
-      {
-        "@type": "ContactPoint",
-        telephone: siteConfig.phone,
-        contactType: "customer service",
-        areaServed: "SA",
-        availableLanguage: ["ar", "en"],
+        dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+        opens: "08:00",
+        closes: "22:00",
       },
     ],
   };
@@ -113,7 +79,7 @@ export function servicesListSchema() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": absoluteUrl("/#services"),
-    name: "خدمات View",
+    name: "\u062E\u062F\u0645\u0627\u062A View",
     itemListElement: serviceNames.map((name, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -122,7 +88,9 @@ export function servicesListSchema() {
   };
 }
 
-export function breadcrumbSchema(items: { name: string; url: string }[]) {
+export function breadcrumbSchema(
+  items: { name: string; url: string }[]
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -147,118 +115,5 @@ export function faqSchema(items: { q: string; a: string }[]) {
         text: item.a,
       },
     })),
-  };
-}
-
-export function serviceSchema(service: ServiceItem) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "@id": absoluteUrl(`/services/${service.slug}#service`),
-    name: service.title,
-    description: service.metaDescription,
-    url: absoluteUrl(`/services/${service.slug}`),
-    image: absoluteUrl(service.image),
-    serviceType: service.title,
-    category: "الرخام والتشطيبات",
-    provider: {
-      "@id": absoluteUrl("/#organization"),
-    },
-    areaServed: siteConfig.serviceAreas.map((area) => ({
-      "@type": "City",
-      name: area,
-    })),
-    audience: {
-      "@type": "Audience",
-      audienceType: "الفلل والقصور والمشاريع التجارية",
-    },
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "SAR",
-      availability: "https://schema.org/InStock",
-      seller: {
-        "@id": absoluteUrl("/#organization"),
-      },
-    },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: service.title,
-      itemListElement: service.useCases.map((useCase, index) => ({
-        "@type": "Offer",
-        position: index + 1,
-        itemOffered: {
-          "@type": "Service",
-          name: useCase,
-        },
-      })),
-    },
-  };
-}
-
-export function areaServiceSchema(area: AreaItem) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "@id": absoluteUrl(`/areas/${area.slug}#service`),
-    name: `خدمات الرخام في ${area.name}`,
-    description: area.metaDescription,
-    url: absoluteUrl(`/areas/${area.slug}`),
-    provider: {
-      "@id": absoluteUrl("/#organization"),
-    },
-    areaServed: {
-      "@type": "City",
-      name: area.name,
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: siteConfig.region,
-      },
-    },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: `خدمات فيو في ${area.name}`,
-      itemListElement: area.services.map((service, index) => ({
-        "@type": "Offer",
-        position: index + 1,
-        itemOffered: {
-          "@type": "Service",
-          name: service,
-        },
-      })),
-    },
-  };
-}
-
-export function articleSchema(post: BlogPost) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "@id": absoluteUrl(`/blog/${post.slug}#article`),
-    headline: post.title,
-    description: post.excerpt,
-    image: [absoluteUrl(post.cover)],
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    inLanguage: "ar-SA",
-    articleSection: post.category,
-    keywords: [...post.keywords],
-    wordCount: post.content.reduce((sum, block) => {
-      if (block.type === "list") {
-        return sum + block.items.reduce((s, i) => s + i.split(/\s+/).length, 0);
-      }
-      return sum + (block.text?.split(/\s+/).length ?? 0);
-    }, 0),
-    author: {
-      "@type": "Person",
-      name: post.author.name,
-      jobTitle: post.author.role,
-    },
-    publisher: {
-      "@id": absoluteUrl("/#organization"),
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": absoluteUrl(`/blog/${post.slug}`),
-    },
   };
 }
