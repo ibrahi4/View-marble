@@ -5,6 +5,7 @@ const env = {
   email: process.env.NEXT_PUBLIC_EMAIL ?? "hello@view.sa",
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-WPDJK55F",
+  googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "AW-18420443406",
 };
 
 const cleanDigits = (raw: string) => raw.replace(/\D/g, "");
@@ -27,6 +28,7 @@ export const siteConfig = {
   email: env.email,
   gaId: env.gaId,
   gtmId: env.gtmId,
+  googleAdsId: env.googleAdsId,
   location: "\u0627\u0644\u062F\u0645\u0627\u0645",
   region: "\u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0631\u0642\u064A\u0629",
   title:
